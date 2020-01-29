@@ -13,6 +13,8 @@ export class FilterComponent implements OnInit {
     { id: 'E19', img: 'c/c1/Denmark_road_sign_E19-L.svg' },
     { id: 'E23', img: '5/54/Denmark_road_sign_E23.svg' },
     { id: 'C19', img: '7/75/Denmark_road_sign_C19.svg' },
+    { id: 'E21,1', img: 'e/e4/Denmark_road_sign_E21.1.svg' },
+    { id: 'A92', img: 'a/a7/Denmark_road_sign_A92.svg' }
   ];
 
   constructor() { }

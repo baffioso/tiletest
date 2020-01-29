@@ -1,12 +1,13 @@
 <div id="filter">
     <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
         <mat-button-toggle 
+            class="btn"
             *ngFor="let item of buttons" 
             value="{{item.id}}" 
             (click)="clicked(item.id)"
         >
             <img src="{{'https://upload.wikimedia.org/wikipedia/commons/' + item.img}}" width="35px" alt="{{item.id}}">
         </mat-button-toggle>
-        <mat-button-toggle value="Alle" (click)="clicked('Alle')">Alle</mat-button-toggle>
+        <mat-button-toggle class="btn" value="Alle" (click)="clicked('Alle')">Alle</mat-button-toggle>
     </mat-button-toggle-group>
 </div>
