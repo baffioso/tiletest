@@ -1,7 +1,11 @@
 <div id="map">
-    <div *ngIf="currentProperties.hovedtavle_1" id="infobox">
-        <h3>{{currentProperties.hovedtavle_1}}</h3> 
-    </div>
+    <app-infobox 
+        *ngIf="signId"
+        [signId]="signId"
+    ></app-infobox>
+    <app-filter
+        (filtered)=filterFeature($event)
+    ></app-filter>
 </div>
 
 

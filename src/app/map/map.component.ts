@@ -14,7 +14,7 @@ export class MapComponent implements OnInit {
     style = 'mapbox://styles/mapbox/dark-v9';
     lat = 55.6669;
     lng = 12.5234;
-    currentProperties = {};
+    signId: string;
 
     constructor() { }
 
@@ -34,7 +34,7 @@ export class MapComponent implements OnInit {
             const layers = this.map.getStyle().layers;
             // Find the index of the first symbol layer in the map style
             let firstSymbolId;
-            for (var i = 0; i < layers.length; i++) {
+            for (let i = 0; i < layers.length; i++) {
                 if (layers[i].type === 'symbol') {
                     firstSymbolId = layers[i].id;
                     break;
@@ -60,15 +60,35 @@ export class MapComponent implements OnInit {
                 }, firstSymbolId
             );
 
+            // this.map.addLayer(
+            //     {
+            //         id: '500k_points',
+            //         type: 'circle',
+            //         source: {
+            //             type: 'vector',
+            //             tiles: [
+            //                 'http://tegola.baffioso.dk/maps/test/{z}/{x}/{y}.pbf'
+            //             ],
+            //             minzoom: 7,
+            //             maxzoom: 22
+            //         },
+            //         'source-layer': 'many_points',
+            //         paint: {
+            //             'circle-color': 'rgb(53, 175, 255)',
+            //             'circle-radius': 1
+            //         }
+            //     }, firstSymbolId
+            // );
+
             this.map.on('mouseenter', 'signs', e => {
                 this.map.getCanvas().style.cursor = 'pointer';
                 const renderedFeatures = this.map.queryRenderedFeatures(e.point);
-                this.currentProperties = renderedFeatures[0].properties;
+                this.signId = renderedFeatures[0].properties.hovedtavle_1;
             });
 
             this.map.on('mouseleave', 'signs', () => {
                 this.map.getCanvas().style.cursor = '';
-                this.currentProperties = {};
+                this.signId = null;
             });
 
             this.map.on('click', 'signs', e => {
@@ -79,4 +99,11 @@ export class MapComponent implements OnInit {
         });
     }
 
+    filterFeature(signId) {
+        if (signId === 'Alle') {
+            this.map.setFilter('signs', null)
+        } else {
+            this.map.setFilter('signs', ['==', 'hovedtavle_1', signId]);
+        }
+    }
 }

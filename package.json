@@ -1,5 +1,6 @@
 {
   "name": "tyler",
+  "homepage": "http://baffioso.github.io/sign/",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",

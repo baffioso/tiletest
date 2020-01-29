@@ -1,0 +1,9 @@
+.app-navbar {
+    background-color: rgba(0,0,0,0);
+    color: white;
+}
+
+.mat-toolbar {
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+}
