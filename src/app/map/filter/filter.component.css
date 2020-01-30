@@ -1,14 +1,12 @@
 #filter {
-    overflow: auto;
-    position: absolute;
-    bottom: 40px;
-    left: 10px;
-    z-index: 1;
+    overflow-x: auto;
+    background-color: #343434;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .btn {
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgb(29, 29, 29);
     color: white;
-    border: 1px solid black;
-    display:inline-block;
+    border: 1px solid rgb(77, 77, 77);
 }

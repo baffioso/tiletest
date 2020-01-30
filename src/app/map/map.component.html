@@ -3,9 +3,7 @@
         *ngIf="signId"
         [signId]="signId"
     ></app-infobox>
-    <app-filter
-        (filtered)=filterFeature($event)
-    ></app-filter>
 </div>
-
-
+<app-filter
+    (filtered)=filterFeature($event)
+></app-filter>
