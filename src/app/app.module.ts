@@ -12,7 +12,6 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatButtonModule} from '@angular/material/button';
 
-
 @NgModule({
    declarations: [
       AppComponent,
@@ -26,7 +25,7 @@ import {MatButtonModule} from '@angular/material/button';
       BrowserAnimationsModule,
       MatToolbarModule,
       MatButtonToggleModule,
-      MatButtonModule
+      MatButtonModule,
    ],
    providers: [],
    bootstrap: [

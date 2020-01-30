@@ -7,4 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class InfoboxComponent {
   @Input() signId: string;
+  @Input() image: string;
 }

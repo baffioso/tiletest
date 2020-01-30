@@ -1,4 +1,4 @@
-#filter {
+.container {
     overflow-x: auto;
     background-color: #343434;
     margin: 0 auto;
@@ -6,7 +6,32 @@
 }
 
 .btn {
-    background-color: rgba(29, 29, 29, 0.1);
+    background-color: rgb(134, 132, 132);
     color: white;
-    border: 1px solid rgb(77, 77, 77);
+}
+
+.btn:hover {
+    background-color: rgb(212, 212, 212);
+}
+
+.mat-button-toggle-checked {
+    background-color: rgb(243, 243, 243);
+    color: darkgray;
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+::-webkit-scrollbar:horizontal {
+    height: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 4px;
+    background-color: #8b8b8b;
 }

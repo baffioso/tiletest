@@ -1,4 +1,4 @@
-<div id="filter">
+<div class="container">
     <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
         <mat-button-toggle class="btn" value="Alle" (click)="clicked('Alle')">Alle</mat-button-toggle>
         <mat-button-toggle class="btn" *ngFor="let item of buttons" value="{{item.id}}" (click)="clicked(item.id)">

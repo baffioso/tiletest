@@ -15,6 +15,7 @@ export class MapComponent implements OnInit {
     lat = 55.6669;
     lng = 12.5234;
     signId: string;
+    image: string;
 
     constructor() { }
 
@@ -86,11 +87,13 @@ export class MapComponent implements OnInit {
                 this.map.getCanvas().style.cursor = 'pointer';
                 const renderedFeatures = this.map.queryRenderedFeatures(e.point);
                 this.signId = renderedFeatures[0].properties.hovedtavle_1;
+                this.image = renderedFeatures[0].properties.foto_id;
             });
 
             this.map.on('mouseleave', 'signs', () => {
                 this.map.getCanvas().style.cursor = '';
                 this.signId = null;
+                this.image = null
             });
 
             this.map.on('click', 'signs', e => {
