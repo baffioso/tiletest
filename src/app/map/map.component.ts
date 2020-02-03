@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 
 import { environment } from '../../environments/environment';
@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
     templateUrl: './map.component.html',
     styleUrls: ['./map.component.css']
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements AfterViewInit {
     map: mapboxgl.Map;
     style = 'mapbox://styles/mapbox/dark-v9';
     lat = 55.6669;
@@ -19,10 +19,10 @@ export class MapComponent implements OnInit {
 
     constructor() { }
 
-    ngOnInit() {
+    ngAfterViewInit() {
 
         Object.getOwnPropertyDescriptor(mapboxgl, 'accessToken').set(environment.mapbox.accessToken);
-        //mapboxgl.accessToken = environment.mapbox.accessToken;
+
         this.map = new mapboxgl.Map({
             container: 'map',
             style: this.style,
@@ -31,12 +31,12 @@ export class MapComponent implements OnInit {
             hash: true
         });
         // Add map controls
-        this.map.addControl(new mapboxgl.NavigationControl(), 'top-left');
+        this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
         this.map.on('load', () => {
             const layers = this.map.getStyle().layers;
             // Find the index of the first symbol layer in the map style
-            let firstSymbolId;
+            let firstSymbolId: string;
             for (let i = 0; i < layers.length; i++) {
                 if (layers[i].type === 'symbol') {
                     firstSymbolId = layers[i].id;
@@ -50,7 +50,7 @@ export class MapComponent implements OnInit {
                     source: {
                         type: 'vector',
                         tiles: [
-                            'http://tegola.baffioso.dk/maps/puma/{z}/{x}/{y}.pbf'
+                            'https://tegola.baffioso.dk/maps/puma/{z}/{x}/{y}.pbf'
                         ],
                         minzoom: 7,
                         maxzoom: 22
@@ -70,7 +70,7 @@ export class MapComponent implements OnInit {
             //         source: {
             //             type: 'vector',
             //             tiles: [
-            //                 'http://tegola.baffioso.dk/maps/test/{z}/{x}/{y}.pbf'
+            //                 'https://tegola.baffioso.dk/maps/test/{z}/{x}/{y}.pbf'
             //             ],
             //             minzoom: 7,
             //             maxzoom: 22
@@ -106,7 +106,7 @@ export class MapComponent implements OnInit {
 
     filterFeature(signId) {
         if (signId === 'Alle') {
-            this.map.setFilter('signs', null)
+            this.map.setFilter('signs', null);
         } else {
             this.map.setFilter('signs', ['==', 'hovedtavle_1', signId]);
         }

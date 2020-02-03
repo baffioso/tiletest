@@ -7,10 +7,14 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfoboxComponent } from './map/infobox/infobox.component';
 import { FilterComponent } from './map/filter/filter.component';
+import { SidenavComponent } from './sidebar/sidebar.component';
 
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatButtonModule} from '@angular/material/button';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatIconModule} from '@angular/material/icon';
+
 
 @NgModule({
    declarations: [
@@ -18,7 +22,8 @@ import {MatButtonModule} from '@angular/material/button';
       MapComponent,
       NavbarComponent,
       InfoboxComponent,
-      FilterComponent
+      FilterComponent,
+      SidenavComponent
    ],
    imports: [
       BrowserModule,
@@ -26,6 +31,8 @@ import {MatButtonModule} from '@angular/material/button';
       MatToolbarModule,
       MatButtonToggleModule,
       MatButtonModule,
+      MatSidenavModule,
+      MatIconModule
    ],
    providers: [],
    bootstrap: [
