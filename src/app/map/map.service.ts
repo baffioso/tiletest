@@ -8,15 +8,5 @@ import { GeoJSON } from 'geojson';
 export class MapService {
   currentMapFeatures = new EventEmitter();
   zoomToCoordinate = new EventEmitter();
-
-  constructor() { }
-
-  // setCurrentMapFeatures(mapFeatures) {
-  //   console.log(mapFeatures);
-  //   this.currentMapFeatures = mapFeatures;
-  // }
-
-  // getCurrentMapFeatures(): Observable<GeoJSON[]> {
-  //   return of(this.currentMapFeatures);
-  // }
 }
+

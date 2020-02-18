@@ -1,6 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
-import { GeoJSON } from 'geojson';
 
 import { environment } from '../../environments/environment';
 import { MapService } from './map.service';
@@ -112,7 +111,6 @@ export class MapComponent implements AfterViewInit, OnInit {
 
                 if (features) {
                     const uniqueFeatures = this.getUniqueFeatures(features, 'gid');
-                    // this.mapService.setCurrentMapFeatures(uniqueFeatures);
                     this.mapService.currentMapFeatures.emit(uniqueFeatures);
                 }
             });

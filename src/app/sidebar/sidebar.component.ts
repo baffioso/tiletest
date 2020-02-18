@@ -14,12 +14,10 @@ export class SidenavComponent implements OnInit {
   showSidebar = false;
   signList;
 
-  constructor(private mapService: MapService) {
-    this.getMapFeatures();
-  }
+  constructor(private mapService: MapService) {}
 
   ngOnInit() {
-    //this.getMapFeatures();
+    this.getMapFeatures();
   }
 
   toggle() {

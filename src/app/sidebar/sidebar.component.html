@@ -5,7 +5,7 @@
     </mat-nav-list>
   </mat-drawer>
   <div class="example-sidenav-content">
-    <app-map></app-map>
+    <ng-content></ng-content>
     <button mat-fab color="warn" class="toggle-sidebar" (click)="drawer.toggle()" (click)="toggle()">
       <mat-icon *ngIf="!showSidebar" aria-hidden="false" aria-label="Example home icon">keyboard_arrow_right</mat-icon>
       <mat-icon *ngIf="showSidebar" aria-hidden="false" aria-label="Example home icon">keyboard_arrow_left</mat-icon>
