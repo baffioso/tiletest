@@ -1,15 +1,16 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
+import { GeoJSON } from 'geojson';
 
 import { environment } from '../../environments/environment';
-
+import { MapService } from './map.service';
 
 @Component({
     selector: 'app-map',
     templateUrl: './map.component.html',
     styleUrls: ['./map.component.css']
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements AfterViewInit, OnInit {
     map: mapboxgl.Map;
     style = 'mapbox://styles/mapbox/dark-v9';
     lat = 55.6669;
@@ -17,7 +18,11 @@ export class MapComponent implements AfterViewInit {
     signId: string;
     image: string;
 
-    constructor() { }
+    constructor(private mapService: MapService) { }
+
+    ngOnInit() {
+        this.mapService.zoomToCoordinate.subscribe(coordinate => this.flyTo(coordinate));
+    }
 
     ngAfterViewInit() {
 
@@ -37,9 +42,9 @@ export class MapComponent implements AfterViewInit {
             const layers = this.map.getStyle().layers;
             // Find the index of the first symbol layer in the map style
             let firstSymbolId: string;
-            for (let i = 0; i < layers.length; i++) {
-                if (layers[i].type === 'symbol') {
-                    firstSymbolId = layers[i].id;
+            for (const layer of layers) {
+                if (layer.type === 'symbol') {
+                    firstSymbolId = layer.id;
                     break;
                 }
             }
@@ -93,22 +98,56 @@ export class MapComponent implements AfterViewInit {
             this.map.on('mouseleave', 'signs', () => {
                 this.map.getCanvas().style.cursor = '';
                 this.signId = null;
-                this.image = null
+                this.image = null;
             });
 
             this.map.on('click', 'signs', e => {
                 const renderedFeatures = this.map.queryRenderedFeatures(e.point);
                 console.log(renderedFeatures);
-                //this.currentProperties = renderedFeatures[0].properties
+                // this.currentProperties = renderedFeatures[0].properties
+            });
+
+            this.map.on('moveend', () => {
+                const features = this.map.queryRenderedFeatures(null, { layers: ['signs'] });
+
+                if (features) {
+                    const uniqueFeatures = this.getUniqueFeatures(features, 'gid');
+                    // this.mapService.setCurrentMapFeatures(uniqueFeatures);
+                    this.mapService.currentMapFeatures.emit(uniqueFeatures);
+                }
             });
         });
     }
 
-    filterFeature(signId) {
+    flyTo(coordinate) {
+        this.map.flyTo({
+            center: coordinate,
+            zoom: 19
+        });
+    }
+
+    filterFeatures(signId) {
         if (signId === 'Alle') {
             this.map.setFilter('signs', null);
         } else {
             this.map.setFilter('signs', ['==', 'hovedtavle_1', signId]);
         }
+    }
+
+    getUniqueFeatures(array, comparatorProperty) {
+        const existingFeatureKeys = {};
+        // Because features come from tiled vector data, feature geometries may be split
+        // or duplicated across tile boundaries and, as a result, features may appear
+        // multiple times in query results.
+        const uniqueFeatures = array.filter(el => {
+            if (existingFeatureKeys[el.properties[comparatorProperty]]) {
+                return false;
+            } else {
+                existingFeatureKeys[el.properties[comparatorProperty]] = true;
+                return true;
+            }
+        });
+
+        return uniqueFeatures;
     }
 }
