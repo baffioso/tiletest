@@ -1,9 +1,14 @@
 <mat-drawer-container class="example-container" autosize>
+
   <mat-drawer #drawer class="example-sidenav" mode="side">
+    <p *ngIf="!signList || signList.length == 0">Zoom ind for at få vist listen</p>
     <mat-nav-list>
-      <mat-list-item class="list-item" *ngFor="let i of signList" (click)="clicked(i.coordinates)">{{i.sign}}</mat-list-item>
+      <mat-list-item class="list-item" *ngFor="let i of signList" (click)="clicked(i.coordinates)">
+        {{i.sign}}
+      </mat-list-item>
     </mat-nav-list>
   </mat-drawer>
+
   <div class="example-sidenav-content">
     <ng-content></ng-content>
     <button mat-fab color="warn" class="toggle-sidebar" (click)="drawer.toggle()" (click)="toggle()">
@@ -11,4 +16,5 @@
       <mat-icon *ngIf="showSidebar" aria-hidden="false" aria-label="Example home icon">keyboard_arrow_left</mat-icon>
     </button>
   </div>
+
 </mat-drawer-container>

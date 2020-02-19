@@ -111,7 +111,13 @@ export class MapComponent implements AfterViewInit, OnInit {
 
                 if (features) {
                     const uniqueFeatures = this.getUniqueFeatures(features, 'gid');
-                    this.mapService.currentMapFeatures.emit(uniqueFeatures);
+                    // render max 1000 items
+                    console.log(uniqueFeatures.length)
+                    if (uniqueFeatures.length < 1000) {
+                        this.mapService.currentMapFeatures.emit(uniqueFeatures);
+                    } else {
+                        this.mapService.currentMapFeatures.emit([])
+                    }
                 }
             });
         });
