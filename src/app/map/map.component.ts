@@ -1,5 +1,6 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
+import { Subscription } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { MapService } from './map.service';
@@ -9,24 +10,50 @@ import { MapService } from './map.service';
     templateUrl: './map.component.html',
     styleUrls: ['./map.component.css']
 })
-export class MapComponent implements AfterViewInit, OnInit {
+export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
     map: mapboxgl.Map;
     style = 'mapbox://styles/mapbox/dark-v9';
     lat = 55.6669;
     lng = 12.5234;
+    firstSymbolId: string;
     marker: mapboxgl.Marker;
-    infoBox: {signId: string, image: string};
+    infoBox: { signId: string, image: string };
+    private zoomToSub: Subscription;
 
     constructor(private mapService: MapService) { }
 
     ngOnInit() {
-        this.mapService.zoomToCoordinate.
-            subscribe(coordinate => {
+        this.zoomToSub = this.mapService.zoomToCoordinate
+            .subscribe(coordinate => {
                 this.flyTo(coordinate);
                 if (this.marker) {
                     this.marker.remove();
                 }
                 this.marker = new mapboxgl.Marker().setLngLat(coordinate).addTo(this.map);
+            });
+
+        this.mapService.toggle500kPoints
+            .subscribe(showPoints => {
+                console.log('toggled', showPoints);
+                if (showPoints) {
+                    if (this.map.getLayer('500k_points')) {
+                        this.map.setLayoutProperty('500k_points', 'visibility', 'visible');
+                    } else {this.map.addLayer(
+                        {
+                            id: '500k_points',
+                            type: 'circle',
+                            source: 'tiletest',
+                            'source-layer': 'many_points',
+                            paint: {
+                                'circle-color': 'rgb(53, 175, 255)',
+                                'circle-radius': 2
+                            }
+                        }, this.firstSymbolId);
+                    }
+
+                } else {
+                    this.map.setLayoutProperty('500k_points', 'visibility', 'none');
+                }
             });
     }
 
@@ -47,52 +74,43 @@ export class MapComponent implements AfterViewInit, OnInit {
         this.map.on('load', () => {
             const layers = this.map.getStyle().layers;
             // Find the index of the first symbol layer in the map style
-            let firstSymbolId: string;
             for (const layer of layers) {
                 if (layer.type === 'symbol') {
-                    firstSymbolId = layer.id;
+                    this.firstSymbolId = layer.id;
                     break;
                 }
             }
+
+            this.map.addSource('signs', {
+                type: 'vector',
+                tiles: [
+                    'https://tegola.baffioso.dk/maps/puma/{z}/{x}/{y}.pbf'
+                ],
+                minzoom: 7,
+                maxzoom: 22
+            });
+
             this.map.addLayer(
                 {
                     id: 'signs',
                     type: 'circle',
-                    source: {
-                        type: 'vector',
-                        tiles: [
-                            'https://tegola.baffioso.dk/maps/puma/{z}/{x}/{y}.pbf'
-                        ],
-                        minzoom: 7,
-                        maxzoom: 22
-                    },
+                    source: 'signs',
                     'source-layer': 'skilte',
                     paint: {
                         'circle-color': 'rgb(53, 175, 109)',
                         'circle-radius': 4
                     }
-                }, firstSymbolId
+                }, this.firstSymbolId
             );
 
-            // this.map.addLayer(
-            //     {
-            //         id: '500k_points',
-            //         type: 'circle',
-            //         source: {
-            //             type: 'vector',
-            //             tiles: [
-            //                 'https://tegola.baffioso.dk/maps/test/{z}/{x}/{y}.pbf'
-            //             ],
-            //             minzoom: 7,
-            //             maxzoom: 22
-            //         },
-            //         'source-layer': 'many_points',
-            //         paint: {
-            //             'circle-color': 'rgb(53, 175, 255)',
-            //             'circle-radius': 1
-            //         }
-            //     }, firstSymbolId
-            // );
+            this.map.addSource('tiletest', {
+                type: 'vector',
+                tiles: [
+                    'https://tegola.baffioso.dk/maps/test/{z}/{x}/{y}.pbf'
+                ],
+                minzoom: 7,
+                maxzoom: 22
+            });
 
             this.map.on('mouseenter', 'signs', e => {
                 this.map.getCanvas().style.cursor = 'pointer';
@@ -101,8 +119,6 @@ export class MapComponent implements AfterViewInit, OnInit {
                     signId: renderedFeatures[0].properties.hovedtavle_1,
                     image: renderedFeatures[0].properties.foto_id
                 };
-                // this.signId = renderedFeatures[0].properties.hovedtavle_1;
-                // this.image = renderedFeatures[0].properties.foto_id;
             });
 
             this.map.on('mouseleave', 'signs', () => {
@@ -125,13 +141,17 @@ export class MapComponent implements AfterViewInit, OnInit {
                     const uniqueFeatures = this.getUniqueFeatures(features, 'gid');
                     // render max 1000 items
                     if (uniqueFeatures.length < 1000) {
-                        this.mapService.currentMapFeatures.emit(uniqueFeatures);
+                        this.mapService.currentMapFeatures.next(uniqueFeatures);
                     } else {
-                        this.mapService.currentMapFeatures.emit([]);
+                        this.mapService.currentMapFeatures.next([]);
                     }
                 }
             });
         });
+    }
+
+    ngOnDestroy() {
+        this.zoomToSub.unsubscribe();
     }
 
     flyTo(coordinate: [number, number]) {

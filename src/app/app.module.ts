@@ -15,6 +15,8 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { LayerControlComponent } from './map/layer-control/layer-control.component';
 
 @NgModule({
    declarations: [
@@ -23,7 +25,8 @@ import {MatListModule} from '@angular/material/list';
       NavbarComponent,
       InfoboxComponent,
       FilterComponent,
-      SidenavComponent
+      SidenavComponent,
+      LayerControlComponent
    ],
    imports: [
       BrowserModule,
@@ -33,7 +36,8 @@ import {MatListModule} from '@angular/material/list';
       MatButtonModule,
       MatSidenavModule,
       MatIconModule,
-      MatListModule
+      MatListModule,
+      MatSlideToggleModule
    ],
    providers: [],
    bootstrap: [

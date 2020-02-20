@@ -1,0 +1,7 @@
+<div class="layer-control">
+    <mat-list role="list">
+        <mat-list-item role="listitem" *ngFor="let layer of layers">
+            <mat-slide-toggle class="toggle" (click)="toggleLayerVisibility(layer.id)">{{layer.name}}</mat-slide-toggle>
+        </mat-list-item>
+    </mat-list>    
+</div>
