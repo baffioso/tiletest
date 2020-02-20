@@ -15,7 +15,7 @@ export class SidenavComponent implements OnInit {
   signList: {
     sign: string,
     coordinates: [number, number]
-  };
+  }[];
 
   constructor(private mapService: MapService) {}
 
