@@ -1,12 +1,12 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-filter',
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.css']
 })
-export class FilterComponent implements OnInit {
-  @Output() filtered = new EventEmitter<any>();
+export class FilterComponent {
+  @Output() filtered = new EventEmitter<string>();
   buttons = [
     { id: 'E33', img: 'c/c4/Denmark_road_sign_E33.1.svg' },
     { id: 'C61', img: 'b/bb/Denmark_road_sign_C61.svg' },
@@ -17,13 +17,7 @@ export class FilterComponent implements OnInit {
     { id: 'A92', img: 'a/a7/Denmark_road_sign_A92.svg' }
   ];
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-  clicked(signId) {
+  clicked(signId: string) {
     this.filtered.emit(signId);
   }
-
 }

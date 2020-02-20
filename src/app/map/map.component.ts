@@ -14,9 +14,8 @@ export class MapComponent implements AfterViewInit, OnInit {
     style = 'mapbox://styles/mapbox/dark-v9';
     lat = 55.6669;
     lng = 12.5234;
-    signId: string;
-    image: string;
-    marker;
+    marker: mapboxgl.Marker;
+    infoBox: {signId: string, image: string};
 
     constructor(private mapService: MapService) { }
 
@@ -98,14 +97,19 @@ export class MapComponent implements AfterViewInit, OnInit {
             this.map.on('mouseenter', 'signs', e => {
                 this.map.getCanvas().style.cursor = 'pointer';
                 const renderedFeatures = this.map.queryRenderedFeatures(e.point);
-                this.signId = renderedFeatures[0].properties.hovedtavle_1;
-                this.image = renderedFeatures[0].properties.foto_id;
+                this.infoBox = {
+                    signId: renderedFeatures[0].properties.hovedtavle_1,
+                    image: renderedFeatures[0].properties.foto_id
+                };
+                // this.signId = renderedFeatures[0].properties.hovedtavle_1;
+                // this.image = renderedFeatures[0].properties.foto_id;
             });
 
             this.map.on('mouseleave', 'signs', () => {
                 this.map.getCanvas().style.cursor = '';
-                this.signId = null;
-                this.image = null;
+                this.infoBox = null;
+                // this.signId = null;
+                // this.image = null;
             });
 
             this.map.on('click', 'signs', e => {
@@ -115,30 +119,29 @@ export class MapComponent implements AfterViewInit, OnInit {
             });
 
             this.map.on('moveend', () => {
-                const features = this.map.queryRenderedFeatures(null, { layers: ['signs'] });
+                const features: GeoJSON.Feature[] = this.map.queryRenderedFeatures(null, { layers: ['signs'] });
 
                 if (features) {
                     const uniqueFeatures = this.getUniqueFeatures(features, 'gid');
                     // render max 1000 items
-                    console.log(uniqueFeatures.length)
                     if (uniqueFeatures.length < 1000) {
                         this.mapService.currentMapFeatures.emit(uniqueFeatures);
                     } else {
-                        this.mapService.currentMapFeatures.emit([])
+                        this.mapService.currentMapFeatures.emit([]);
                     }
                 }
             });
         });
     }
 
-    flyTo(coordinate) {
+    flyTo(coordinate: [number, number]) {
         this.map.flyTo({
             center: coordinate,
             zoom: 19
         });
     }
 
-    filterFeatures(signId) {
+    filterFeatures(signId: string) {
         if (signId === 'Alle') {
             this.map.setFilter('signs', null);
         } else {
@@ -146,7 +149,7 @@ export class MapComponent implements AfterViewInit, OnInit {
         }
     }
 
-    getUniqueFeatures(array, comparatorProperty) {
+    getUniqueFeatures(array: GeoJSON.Feature[], comparatorProperty: string) {
         const existingFeatureKeys = {};
         // Because features come from tiled vector data, feature geometries may be split
         // or duplicated across tile boundaries and, as a result, features may appear

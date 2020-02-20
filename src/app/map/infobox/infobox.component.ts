@@ -6,6 +6,8 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./infobox.component.css']
 })
 export class InfoboxComponent {
-  @Input() signId: string;
-  @Input() image: string;
+  @Input() infoBox: {
+    signId: string,
+    image: string
+  };
 }

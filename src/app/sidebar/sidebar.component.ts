@@ -12,7 +12,10 @@ import { MapService } from '../map/map.service';
 })
 export class SidenavComponent implements OnInit {
   showSidebar = false;
-  signList;
+  signList: {
+    sign: string,
+    coordinates: [number, number]
+  };
 
   constructor(private mapService: MapService) {}
 
@@ -24,17 +27,16 @@ export class SidenavComponent implements OnInit {
     this.showSidebar = !this.showSidebar;
   }
 
-  clicked(coordinates) {
+  clicked(coordinates: [number, number]) {
     this.mapService.zoomToCoordinate.emit(coordinates);
   }
 
   getMapFeatures() {
     this.mapService.currentMapFeatures
       .subscribe(features => {
-        this.signList = features.map(feature => {
-          return {sign: feature.properties.hovedtavle_1 , coordinates: feature.geometry.coordinates}
+        this.signList = features.map(i => {
+          return {sign: i.properties.hovedtavle_1 , coordinates: i.geometry.coordinates};
         });
       });
   }
-
 }
