@@ -16,11 +16,19 @@ export class MapComponent implements AfterViewInit, OnInit {
     lng = 12.5234;
     signId: string;
     image: string;
+    marker;
 
     constructor(private mapService: MapService) { }
 
     ngOnInit() {
-        this.mapService.zoomToCoordinate.subscribe(coordinate => this.flyTo(coordinate));
+        this.mapService.zoomToCoordinate.
+            subscribe(coordinate => {
+                this.flyTo(coordinate);
+                if (this.marker) {
+                    this.marker.remove();
+                }
+                this.marker = new mapboxgl.Marker().setLngLat(coordinate).addTo(this.map);
+            });
     }
 
     ngAfterViewInit() {
