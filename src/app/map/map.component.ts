@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { MapService } from './map.service';
+import { LAYERS } from './map-layers';
 
 @Component({
     selector: 'app-map',
@@ -32,13 +33,19 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                 this.marker = new mapboxgl.Marker().setLngLat(coordinate).addTo(this.map);
             });
 
+        this.mapService.layers
+            .subscribe(layers => {
+                console.log(layers);
+            });
+
         this.mapService.toggle500kPoints
             .subscribe(showPoints => {
-                console.log('toggled', showPoints);
+                console.log('toggled', showPoints, LAYERS.manyPoints.layer);
                 if (showPoints) {
                     if (this.map.getLayer('500k_points')) {
                         this.map.setLayoutProperty('500k_points', 'visibility', 'visible');
                     } else {this.map.addLayer(
+                        //LAYERS.manyPoints.layer,
                         {
                             id: '500k_points',
                             type: 'circle',
@@ -48,7 +55,8 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                                 'circle-color': 'rgb(53, 175, 255)',
                                 'circle-radius': 2
                             }
-                        }, this.firstSymbolId);
+                        },
+                        this.firstSymbolId);
                     }
 
                 } else {
@@ -152,6 +160,29 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.zoomToSub.unsubscribe();
+    }
+
+    toggleLayerVisibility(layerId: string, visible: boolean) {
+        if (visible) {
+            this.map.setLayoutProperty(layerId, 'visibility', 'visible');
+        } else {
+            this.map.setLayoutProperty(layerId, 'visibility', 'none');
+        }
+    }
+
+    addLayer(source, layer) {
+        this.map.addLayer(
+            {
+                id: 'signs',
+                type: 'circle',
+                source: 'signs',
+                'source-layer': 'skilte',
+                paint: {
+                    'circle-color': 'rgb(53, 175, 109)',
+                    'circle-radius': 4
+                }
+            }, this.firstSymbolId
+        );
     }
 
     flyTo(coordinate: [number, number]) {

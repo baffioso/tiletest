@@ -6,12 +6,8 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class MapService {
-  currentMapFeatures = new Subject<GeoJSON.Feature[]>();
+  currentMapFeatures = new Subject<any[]>();
   zoomToCoordinate = new Subject<[number, number]>();
+  layers = new Subject<{name: string, id: string, visible: boolean}[]>();
   toggle500kPoints = new EventEmitter<boolean>();
-  layers = [
-    {name: 'Vejskilte', id: 'signs', visible: false},
-    {name: '500K punkter', id: '500k_points', visible: false}
-  ];
-  // layerToggled = new EventEmitter<{name: string, id: string, visible: boolean}[]>();
 }
