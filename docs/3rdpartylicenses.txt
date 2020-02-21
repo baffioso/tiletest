@@ -97,6 +97,8 @@ THE SOFTWARE.
 
 @angular/material/sidenav
 
+@angular/material/slide-toggle
+
 @angular/platform-browser
 MIT
 
