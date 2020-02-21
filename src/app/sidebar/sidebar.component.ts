@@ -17,7 +17,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
     sign: string,
     coordinates: [number, number]
   }[];
-  show500kPoints = false;
   private feautesSub: Subscription;
 
   constructor(private mapService: MapService) {}
@@ -36,11 +35,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   clicked(coordinates: [number, number]) {
     this.mapService.zoomToCoordinate.next(coordinates);
-  }
-
-  toggle500kPoints() {
-    this.show500kPoints = !this.show500kPoints;
-    this.mapService.toggle500kPoints.emit(this.show500kPoints);
   }
 
   getMapFeatures() {

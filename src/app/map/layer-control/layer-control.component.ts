@@ -9,7 +9,7 @@ import { MapService } from '../map.service';
 export class LayerControlComponent implements OnInit {
   layers = [
     {name: 'Vejskilte', id: 'signs', visible: false},
-    {name: '500K punkter', id: '500k_points', visible: false}
+    {name: '500K punkter', id: 'many_points', visible: false}
   ];
 
   constructor( private mapService: MapService) { }

@@ -10,7 +10,7 @@ export const LAYERS = {
         },
         layer: {
             id: 'signs',
-            type: 'circle',
+            type: "circle",
             source: 'signs',
             'source-layer': 'skilte',
             paint: {
@@ -19,7 +19,7 @@ export const LAYERS = {
             }
         }
     },
-    manyPoints: {
+    'many_points': {
         source: {
             type: 'vector',
             tiles: [
@@ -29,7 +29,7 @@ export const LAYERS = {
             maxzoom: 22
         },
         layer: {
-            id: '500k_points',
+            id: 'many_points',
             type: 'circle',
             source: 'tiletest',
             'source-layer': 'many_points',

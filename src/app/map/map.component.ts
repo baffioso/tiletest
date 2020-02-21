@@ -20,6 +20,7 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
     marker: mapboxgl.Marker;
     infoBox: { signId: string, image: string };
     private zoomToSub: Subscription;
+    private layerControlSub: Subscription;
 
     constructor(private mapService: MapService) { }
 
@@ -33,35 +34,22 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                 this.marker = new mapboxgl.Marker().setLngLat(coordinate).addTo(this.map);
             });
 
-        this.mapService.layers
+        this.layerControlSub = this.mapService.layers
             .subscribe(layers => {
-                console.log(layers);
-            });
-
-        this.mapService.toggle500kPoints
-            .subscribe(showPoints => {
-                console.log('toggled', showPoints, LAYERS.manyPoints.layer);
-                if (showPoints) {
-                    if (this.map.getLayer('500k_points')) {
-                        this.map.setLayoutProperty('500k_points', 'visibility', 'visible');
-                    } else {this.map.addLayer(
-                        //LAYERS.manyPoints.layer,
-                        {
-                            id: '500k_points',
-                            type: 'circle',
-                            source: 'tiletest',
-                            'source-layer': 'many_points',
-                            paint: {
-                                'circle-color': 'rgb(53, 175, 255)',
-                                'circle-radius': 2
-                            }
-                        },
-                        this.firstSymbolId);
+                layers.forEach(layer => {
+                    if (layer.visible) {
+                        if (this.map.getLayer(layer.id)) {
+                            this.map.setLayoutProperty(layer.id, 'visibility', 'visible');
+                        } else {
+                            this.map.addLayer(LAYERS[layer.id].layer, this.firstSymbolId);
+                        }
+                    } else {
+                        this.map.setLayoutProperty(layer.id, 'visibility', 'none');
+                        if (this.marker) {
+                            this.marker.remove();
+                        }
                     }
-
-                } else {
-                    this.map.setLayoutProperty('500k_points', 'visibility', 'none');
-                }
+                })
             });
     }
 
@@ -97,19 +85,6 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                 minzoom: 7,
                 maxzoom: 22
             });
-
-            this.map.addLayer(
-                {
-                    id: 'signs',
-                    type: 'circle',
-                    source: 'signs',
-                    'source-layer': 'skilte',
-                    paint: {
-                        'circle-color': 'rgb(53, 175, 109)',
-                        'circle-radius': 4
-                    }
-                }, this.firstSymbolId
-            );
 
             this.map.addSource('tiletest', {
                 type: 'vector',
@@ -160,29 +135,7 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.zoomToSub.unsubscribe();
-    }
-
-    toggleLayerVisibility(layerId: string, visible: boolean) {
-        if (visible) {
-            this.map.setLayoutProperty(layerId, 'visibility', 'visible');
-        } else {
-            this.map.setLayoutProperty(layerId, 'visibility', 'none');
-        }
-    }
-
-    addLayer(source, layer) {
-        this.map.addLayer(
-            {
-                id: 'signs',
-                type: 'circle',
-                source: 'signs',
-                'source-layer': 'skilte',
-                paint: {
-                    'circle-color': 'rgb(53, 175, 109)',
-                    'circle-radius': 4
-                }
-            }, this.firstSymbolId
-        );
+        this.layerControlSub.unsubscribe();
     }
 
     flyTo(coordinate: [number, number]) {
@@ -216,4 +169,27 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
 
         return uniqueFeatures;
     }
+
+    // toggleLayerVisibility(layerId: string, visible: boolean) {
+    //     if (visible) {
+    //         this.map.setLayoutProperty(layerId, 'visibility', 'visible');
+    //     } else {
+    //         this.map.setLayoutProperty(layerId, 'visibility', 'none');
+    //     }
+    // }
+
+    // addLayer(source, layer) {
+    //     this.map.addLayer(
+    //         {
+    //             id: 'signs',
+    //             type: 'circle',
+    //             source: 'signs',
+    //             'source-layer': 'skilte',
+    //             paint: {
+    //                 'circle-color': 'rgb(53, 175, 109)',
+    //                 'circle-radius': 4
+    //             }
+    //         }, this.firstSymbolId
+    //     );
+    // }
 }

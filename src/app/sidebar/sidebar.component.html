@@ -1,7 +1,6 @@
 <mat-drawer-container class="example-container" autosize>
 
   <mat-drawer #drawer class="example-sidenav" mode="side">
-    <mat-slide-toggle (click)="toggle500kPoints()">500K Points</mat-slide-toggle>
     <p *ngIf="!signList || signList.length == 0">Zoom ind for at få vist listen</p>
     <mat-nav-list>
       <mat-list-item class="list-item" *ngFor="let i of signList" (click)="clicked(i.coordinates)">
