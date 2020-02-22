@@ -16,8 +16,13 @@ export class FilterComponent {
     { id: 'E21,1', img: 'e/e4/Denmark_road_sign_E21.1.svg' },
     { id: 'A92', img: 'a/a7/Denmark_road_sign_A92.svg' }
   ];
+  filterVisible = false;
 
   clicked(signId: string) {
     this.filtered.emit(signId);
+  }
+
+  toggleFilter() {
+    this.filterVisible = !this.filterVisible;
   }
 }

@@ -1,8 +1,18 @@
+.toggle-filter-btn {
+    position: absolute;
+    top: 150px;
+    right: 10px;
+    z-index: 1;
+}
+
 .container {
+    bottom: 0;
+    position: absolute;
     overflow-x: auto;
-    background-color: #343434;
     margin: 0 auto;
     text-align: center;
+    z-index: 200;
+    width: 100%;
 }
 
 .btn {

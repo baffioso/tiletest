@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 })
 export class MapService {
   currentMapFeatures = new Subject<any[]>();
+  updateCurrentMapFeatures = new Subject();
   zoomToCoordinate = new Subject<[number, number]>();
   layers = new Subject<{name: string, id: string, visible: boolean}[]>();
 }

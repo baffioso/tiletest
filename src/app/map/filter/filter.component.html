@@ -1,8 +1,17 @@
-<div class="container">
+<button 
+    mat-fab color="warn" 
+    class="toggle-filter-btn" 
+    aria-label="layer control"
+    (click)="toggleFilter()"
+>
+    <mat-icon aria-hidden="false">filter_list</mat-icon>
+</button>
+
+<div class="container" *ngIf="filterVisible">
     <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
         <mat-button-toggle class="btn" value="Alle" (click)="clicked('Alle')">Alle</mat-button-toggle>
         <mat-button-toggle class="btn" *ngFor="let item of buttons" value="{{item.id}}" (click)="clicked(item.id)">
-            <img src="{{'https://upload.wikimedia.org/wikipedia/commons/' + item.img}}" width="35px" alt="{{item.id}}">
+            <img [src]="'https://upload.wikimedia.org/wikipedia/commons/' + item.img" width="35px" alt="{{item.id}}">
         </mat-button-toggle>
     </mat-button-toggle-group>
 </div>

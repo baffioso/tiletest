@@ -4,7 +4,8 @@
         *ngIf="infoBox"
         [infoBox]="infoBox"
     ></app-infobox>
+    <app-filter
+        (filtered)=filterFeatures($event)
+    ></app-filter>
 </div>
-<app-filter
-    (filtered)=filterFeatures($event)
-></app-filter>
+

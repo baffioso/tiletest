@@ -1,11 +1,4 @@
 #map {
     width: 100%;
-    height: calc(100% - 50px);
-}
-
-/* handling scroll bar on filter */
-@media (max-width: 472px) {
-    #map {
-        height: calc(100% - 58px);
-    }
+    height: 100%;
 }

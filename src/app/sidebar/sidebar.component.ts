@@ -12,25 +12,26 @@ import { MapService } from '../map/map.service';
   styleUrls: ['sidebar.component.css'],
 })
 export class SidenavComponent implements OnInit, OnDestroy {
-  showSidebar = false;
   signList: {
     sign: string,
     coordinates: [number, number]
   }[];
-  private feautesSub: Subscription;
+  layers;
+  private featuresSub: Subscription;
+  private layersSub: Subscription;
 
   constructor(private mapService: MapService) {}
 
   ngOnInit() {
     this.getMapFeatures();
+    this.layersSub = this.mapService.layers.subscribe(layers => {
+      this.layers = layers;
+    });
   }
 
   ngOnDestroy() {
-    this.feautesSub.unsubscribe();
-  }
-
-  toggle() {
-    this.showSidebar = !this.showSidebar;
+    this.featuresSub.unsubscribe();
+    this.layers.unsubscribe();
   }
 
   clicked(coordinates: [number, number]) {
@@ -38,11 +39,15 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   getMapFeatures() {
-    this.feautesSub = this.mapService.currentMapFeatures
+    this.featuresSub = this.mapService.currentMapFeatures
       .subscribe(features => {
         this.signList = features.map(i => {
           return {sign: i.properties.hovedtavle_1 , coordinates: i.geometry.coordinates};
         });
       });
+  }
+
+  updateMapFeatures() {
+    this.mapService.updateCurrentMapFeatures.next();
   }
 }

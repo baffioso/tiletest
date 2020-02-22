@@ -19,8 +19,10 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
     firstSymbolId: string;
     marker: mapboxgl.Marker;
     infoBox: { signId: string, image: string };
+    showLayerControl = false;
     private zoomToSub: Subscription;
     private layerControlSub: Subscription;
+    private updateCurrentFeaturesSub: Subscription;
 
     constructor(private mapService: MapService) { }
 
@@ -44,12 +46,30 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                             this.map.addLayer(LAYERS[layer.id].layer, this.firstSymbolId);
                         }
                     } else {
-                        this.map.setLayoutProperty(layer.id, 'visibility', 'none');
+                        if (this.map.getLayer(layer.id)) {
+                            this.map.setLayoutProperty(layer.id, 'visibility', 'none');
+                        }
                         if (this.marker) {
                             this.marker.remove();
                         }
                     }
-                })
+                });
+            });
+
+        this.updateCurrentFeaturesSub = this.mapService.updateCurrentMapFeatures
+            .subscribe(() => {
+                console.log('MESSAGE FROM SIDEBAR');
+                const features: GeoJSON.Feature[] = this.map.queryRenderedFeatures(null, { layers: ['signs'] });
+
+                if (features) {
+                    const uniqueFeatures = this.getUniqueFeatures(features, 'gid');
+                    // render max 1000 items
+                    if (uniqueFeatures.length < 1000) {
+                        this.mapService.currentMapFeatures.next(uniqueFeatures);
+                    } else {
+                        this.mapService.currentMapFeatures.next([]);
+                    }
+                }
             });
     }
 
@@ -65,7 +85,7 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
             hash: true
         });
         // Add map controls
-        this.map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+        this.map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 
         this.map.on('load', () => {
             const layers = this.map.getStyle().layers;
@@ -107,8 +127,6 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
             this.map.on('mouseleave', 'signs', () => {
                 this.map.getCanvas().style.cursor = '';
                 this.infoBox = null;
-                // this.signId = null;
-                // this.image = null;
             });
 
             this.map.on('click', 'signs', e => {
@@ -117,25 +135,13 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                 // this.currentProperties = renderedFeatures[0].properties
             });
 
-            this.map.on('moveend', () => {
-                const features: GeoJSON.Feature[] = this.map.queryRenderedFeatures(null, { layers: ['signs'] });
-
-                if (features) {
-                    const uniqueFeatures = this.getUniqueFeatures(features, 'gid');
-                    // render max 1000 items
-                    if (uniqueFeatures.length < 1000) {
-                        this.mapService.currentMapFeatures.next(uniqueFeatures);
-                    } else {
-                        this.mapService.currentMapFeatures.next([]);
-                    }
-                }
-            });
         });
     }
 
     ngOnDestroy() {
         this.zoomToSub.unsubscribe();
         this.layerControlSub.unsubscribe();
+        this.updateCurrentFeaturesSub.unsubscribe();
     }
 
     flyTo(coordinate: [number, number]) {

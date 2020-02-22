@@ -4,27 +4,37 @@
     color: white;
   }
   
-  .example-sidenav-content {
-    height: 100%;
-    width: 100%;
-  }
-  
-  .example-sidenav {
-    padding: 20px;
-    min-width: 300px;
-    background-color: rgb(73, 73, 73);
-  }
-  
-  .toggle-sidebar {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-  }
+.example-sidenav-content {
+  height: 100%;
+  width: 100%;
+}
 
-  .list-item {
-    color: white;
-  }
+.example-sidenav {
+  padding: 20px;
+  min-width: 300px;
+  background-color: rgb(73, 73, 73);
+}
 
-  p {
-    color: white;
-  }
+.toggle-sidebar {
+  position: absolute;
+  top: 80px;
+  right: 10px;
+}
+
+.close-sidebar {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.list-item {
+  color: white;
+}
+
+p {
+  color: white;
+}
+
+.get-data-btn {
+  color: white;
+}

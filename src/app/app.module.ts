@@ -8,6 +8,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { InfoboxComponent } from './map/infobox/infobox.component';
 import { FilterComponent } from './map/filter/filter.component';
 import { SidenavComponent } from './sidebar/sidebar.component';
+import { LayerControlComponent } from './map/layer-control/layer-control.component';
 
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
@@ -16,7 +17,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import { LayerControlComponent } from './map/layer-control/layer-control.component';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
    declarations: [
@@ -37,7 +38,8 @@ import { LayerControlComponent } from './map/layer-control/layer-control.compone
       MatSidenavModule,
       MatIconModule,
       MatListModule,
-      MatSlideToggleModule
+      MatSlideToggleModule,
+      MatMenuModule
    ],
    providers: [],
    bootstrap: [

@@ -1,7 +1,13 @@
-<mat-drawer-container class="example-container" autosize>
+<mat-drawer-container class="example-container" autosize [hasBackdrop]="false">
 
-  <mat-drawer #drawer class="example-sidenav" mode="side">
-    <p *ngIf="!signList || signList.length == 0">Zoom ind for at få vist listen</p>
+  <mat-drawer #drawer class="example-sidenav" mode="over">
+    <button mat-icon-button class="close-sidebar" (click)="drawer.toggle()">
+      <mat-icon aria-hidden="false" aria-label="Example home icon">close</mat-icon>
+    </button>
+    <button class="get-data-btn" mat-button (click)="updateMapFeatures()">Hent data fra kortet</button>
+    <p *ngIf="!layers">Tilføj skiltelaget til kortet</p>
+    <p *ngIf="!signList || signList.length == 0">Kan max hente data fra 1000 skilte <br> zoom ind for at få vist listen</p>
+
     <mat-nav-list>
       <mat-list-item class="list-item" *ngFor="let i of signList" (click)="clicked(i.coordinates)">
         {{i.sign}}
@@ -11,9 +17,8 @@
 
   <div class="example-sidenav-content">
     <ng-content></ng-content>
-    <button mat-fab color="warn" class="toggle-sidebar" (click)="drawer.toggle()" (click)="toggle()">
-      <mat-icon *ngIf="!showSidebar" aria-hidden="false" aria-label="Example home icon">keyboard_arrow_right</mat-icon>
-      <mat-icon *ngIf="showSidebar" aria-hidden="false" aria-label="Example home icon">keyboard_arrow_left</mat-icon>
+    <button mat-fab color="warn" class="toggle-sidebar" (click)="drawer.toggle()">
+      <mat-icon aria-hidden="false" aria-label="Example home icon">list</mat-icon>
     </button>
   </div>
 
