@@ -19,10 +19,11 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
     firstSymbolId: string;
     marker: mapboxgl.Marker;
     infoBox: { signId: string, image: string };
-    showLayerControl = false;
+    showSignTools = false;
     private zoomToSub: Subscription;
     private layerControlSub: Subscription;
     private updateCurrentFeaturesSub: Subscription;
+    private updateLayersSub: Subscription;
 
     constructor(private mapService: MapService) { }
 
@@ -36,9 +37,9 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                 this.marker = new mapboxgl.Marker().setLngLat(coordinate).addTo(this.map);
             });
 
-        this.layerControlSub = this.mapService.layers
-            .subscribe(layers => {
-                layers.forEach(layer => {
+        this.layerControlSub = this.mapService.layersUpdated
+            .subscribe(() => {
+                this.mapService.layers.forEach(layer => {
                     if (layer.visible) {
                         if (this.map.getLayer(layer.id)) {
                             this.map.setLayoutProperty(layer.id, 'visibility', 'visible');
@@ -70,6 +71,11 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                         this.mapService.currentMapFeatures.next([]);
                     }
                 }
+            });
+
+        this.updateLayersSub = this.mapService.layersUpdated
+            .subscribe(() => {
+                this.showSignTools = this.mapService.layers[0].visible;
             });
     }
 
@@ -142,6 +148,7 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
         this.zoomToSub.unsubscribe();
         this.layerControlSub.unsubscribe();
         this.updateCurrentFeaturesSub.unsubscribe();
+        this.updateLayersSub.unsubscribe();
     }
 
     flyTo(coordinate: [number, number]) {

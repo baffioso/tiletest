@@ -7,20 +7,17 @@ import { MapService } from '../map.service';
   styleUrls: ['./layer-control.component.css']
 })
 export class LayerControlComponent implements OnInit {
-  showLayerControl = false;
-  layers = [
-    { name: 'Vejskilte', id: 'signs', visible: false },
-    { name: '500K punkter', id: 'many_points', visible: false }
-  ];
+  layers: any;
 
   constructor(private mapService: MapService) { }
 
   ngOnInit() {
+    this.layers = this.mapService.layers;
   }
 
   toggleLayerVisibility(layerId: string) {
     const idx = this.layers.findIndex(i => i.id === layerId);
     this.layers[idx].visible = !this.layers[idx].visible;
-    this.mapService.layers.next(this.layers);
+    this.mapService.layersUpdated.next();
   }
 }

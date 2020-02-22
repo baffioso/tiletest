@@ -17,21 +17,24 @@ export class SidenavComponent implements OnInit, OnDestroy {
     coordinates: [number, number]
   }[];
   layers;
+  showSignTools = false;
   private featuresSub: Subscription;
-  private layersSub: Subscription;
+  private layersUpdatedSub: Subscription;
 
   constructor(private mapService: MapService) {}
 
   ngOnInit() {
     this.getMapFeatures();
-    this.layersSub = this.mapService.layers.subscribe(layers => {
-      this.layers = layers;
+
+    this.layersUpdatedSub = this.mapService.layersUpdated.subscribe(() => {
+      this.layers = this.mapService.layers;
+      this.showSignTools = this.mapService.layers[0].visible;
     });
   }
 
   ngOnDestroy() {
     this.featuresSub.unsubscribe();
-    this.layers.unsubscribe();
+    this.layersUpdatedSub.unsubscribe();
   }
 
   clicked(coordinates: [number, number]) {

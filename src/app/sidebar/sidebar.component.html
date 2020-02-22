@@ -17,7 +17,13 @@
 
   <div class="example-sidenav-content">
     <ng-content></ng-content>
-    <button mat-fab color="warn" class="toggle-sidebar" (click)="drawer.toggle()">
+    <button 
+      *ngIf="showSignTools"
+      mat-fab 
+      color="warn" 
+      class="toggle-sidebar" 
+      (click)="drawer.toggle()"
+    >
       <mat-icon aria-hidden="false" aria-label="Example home icon">list</mat-icon>
     </button>
   </div>

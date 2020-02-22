@@ -5,6 +5,7 @@
         [infoBox]="infoBox"
     ></app-infobox>
     <app-filter
+        *ngIf="showSignTools"
         (filtered)=filterFeatures($event)
     ></app-filter>
 </div>
