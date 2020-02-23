@@ -24,7 +24,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   constructor(private mapService: MapService) {}
 
   ngOnInit() {
-    this.getMapFeatures();
+    this.subscribeToMapFeatures();
 
     this.layersUpdatedSub = this.mapService.layersUpdated.subscribe(() => {
       this.layers = this.mapService.layers;
@@ -41,7 +41,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.mapService.zoomToCoordinate.next(coordinates);
   }
 
-  getMapFeatures() {
+  subscribeToMapFeatures() {
     this.featuresSub = this.mapService.currentMapFeatures
       .subscribe(features => {
         this.signList = features.map(i => {
@@ -52,5 +52,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   updateMapFeatures() {
     this.mapService.updateCurrentMapFeatures.next();
+  }
+
+  getMapFeatures() {
+    this.updateMapFeatures();
   }
 }

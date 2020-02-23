@@ -13,4 +13,18 @@ body {
 
 .mapboxgl-ctrl-group {
     background: darkgray;
+    border-radius: 0px;
+}
+
+.mapboxgl-ctrl-group button {
+    width: 35px;
+    height: 35px;
+}
+
+.mat-menu-content {
+    background-color: darkgray;
+}
+
+.mat-slide-toggle-thumb {
+    background-color: black;
 }

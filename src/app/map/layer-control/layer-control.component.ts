@@ -15,9 +15,11 @@ export class LayerControlComponent implements OnInit {
     this.layers = this.mapService.layers;
   }
 
-  toggleLayerVisibility(layerId: string) {
+  toggleLayerVisibility(event, layerId: string) {
     const idx = this.layers.findIndex(i => i.id === layerId);
     this.layers[idx].visible = !this.layers[idx].visible;
     this.mapService.layersUpdated.next();
+    // prevent menu from closing
+    event.stopPropagation();
   }
 }
