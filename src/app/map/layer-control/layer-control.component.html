@@ -9,7 +9,11 @@
 <mat-menu #menu="matMenu" class="layer-control">
     <mat-list role="list" (click)="$event.stopPropagation()">
         <mat-list-item role="listitem" *ngFor="let layer of layers">
-            <mat-slide-toggle color="warn" (click)="toggleLayerVisibility($event, layer.id)">{{layer.name}}
+            <mat-slide-toggle 
+                color="warn" 
+                (click)="toggleLayerVisibility($event, layer.id)"
+            >
+                {{layer.name}}
             </mat-slide-toggle>
         </mat-list-item>
     </mat-list>

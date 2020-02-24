@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { MapService } from '../map/map.service';
+import { Layer } from '../map/layer';
 
 /**
  * @title Autosize sidenav
@@ -16,7 +17,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     sign: string,
     coordinates: [number, number]
   }[];
-  layers;
+  layers: Layer[];
   showSignTools = false;
   private featuresSub: Subscription;
   private layersUpdatedSub: Subscription;

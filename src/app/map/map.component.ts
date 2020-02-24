@@ -39,27 +39,11 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
 
         this.layerControlSub = this.mapService.layersUpdated
             .subscribe(() => {
-                this.mapService.layers.forEach(layer => {
-                    if (layer.visible) {
-                        if (this.map.getLayer(layer.id)) {
-                            this.map.setLayoutProperty(layer.id, 'visibility', 'visible');
-                        } else {
-                            this.map.addLayer(LAYERS[layer.id].layer, this.firstSymbolId);
-                        }
-                    } else {
-                        if (this.map.getLayer(layer.id)) {
-                            this.map.setLayoutProperty(layer.id, 'visibility', 'none');
-                        }
-                        if (this.marker) {
-                            this.marker.remove();
-                        }
-                    }
-                });
+                this.renderMapLayers();
             });
 
         this.updateCurrentFeaturesSub = this.mapService.updateCurrentMapFeatures
             .subscribe(() => {
-                console.log('MESSAGE FROM SIDEBAR');
                 const features: GeoJSON.Feature[] = this.map.queryRenderedFeatures(null, { layers: ['signs'] });
 
                 if (features) {
@@ -121,6 +105,8 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                 maxzoom: 22
             });
 
+            this.renderMapLayers();
+
             this.map.on('mouseenter', 'signs', e => {
                 this.map.getCanvas().style.cursor = 'pointer';
                 const renderedFeatures = this.map.queryRenderedFeatures(e.point);
@@ -137,7 +123,6 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
 
             this.map.on('click', 'signs', e => {
                 const renderedFeatures = this.map.queryRenderedFeatures(e.point);
-                console.log(renderedFeatures);
                 // this.currentProperties = renderedFeatures[0].properties
             });
 
@@ -149,6 +134,25 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
         this.layerControlSub.unsubscribe();
         this.updateCurrentFeaturesSub.unsubscribe();
         this.updateLayersSub.unsubscribe();
+    }
+
+    renderMapLayers() {
+        this.mapService.layers.forEach(layer => {
+            if (layer.visible) {
+                if (this.map.getLayer(layer.id)) {
+                    this.map.setLayoutProperty(layer.id, 'visibility', 'visible');
+                } else {
+                    this.map.addLayer(LAYERS[layer.id].layer, this.firstSymbolId);
+                }
+            } else {
+                if (this.map.getLayer(layer.id)) {
+                    this.map.setLayoutProperty(layer.id, 'visibility', 'none');
+                }
+                if (this.marker) {
+                    this.marker.remove();
+                }
+            }
+        });
     }
 
     flyTo(coordinate: [number, number]) {
@@ -182,27 +186,4 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
 
         return uniqueFeatures;
     }
-
-    // toggleLayerVisibility(layerId: string, visible: boolean) {
-    //     if (visible) {
-    //         this.map.setLayoutProperty(layerId, 'visibility', 'visible');
-    //     } else {
-    //         this.map.setLayoutProperty(layerId, 'visibility', 'none');
-    //     }
-    // }
-
-    // addLayer(source, layer) {
-    //     this.map.addLayer(
-    //         {
-    //             id: 'signs',
-    //             type: 'circle',
-    //             source: 'signs',
-    //             'source-layer': 'skilte',
-    //             paint: {
-    //                 'circle-color': 'rgb(53, 175, 109)',
-    //                 'circle-radius': 4
-    //             }
-    //         }, this.firstSymbolId
-    //     );
-    // }
 }
