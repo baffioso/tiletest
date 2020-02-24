@@ -1,7 +1,7 @@
-<mat-drawer-container class="example-container" autosize [hasBackdrop]="false">
+<mat-sidenav-container class="example-container" autosize [hasBackdrop]="false">
 
-  <mat-drawer #drawer class="example-sidenav" mode="over">
-    <button mat-icon-button class="close-sidebar" (click)="drawer.close()">
+  <mat-sidenav #sidenav class="example-sidenav" mode="over" (opened)="getMapFeatures()">
+    <button mat-icon-button class="close-sidebar" (click)="sidenav.close()">
       <mat-icon aria-hidden="false" aria-label="Example home icon">close</mat-icon>
     </button>
     <p *ngIf="!signList || signList.length == 0">Kan max hente data fra 1000 skilte <br> zoom ind og tryk på knappen herunder</p>
@@ -12,20 +12,19 @@
         {{i.sign}}
       </mat-list-item>
     </mat-nav-list>
-  </mat-drawer>
+  </mat-sidenav>
 
-  <div class="example-sidenav-content">
+  <mat-sidenav-content class="example-sidenav-content">
     <ng-content></ng-content>
     <button 
       *ngIf="showSignTools"
       mat-fab 
       color="warn" 
       class="toggle-sidebar" 
-      (click)="drawer.toggle()"
-      (click)="getMapFeatures()"
+      (click)="sidenav.toggle()"
     >
       <mat-icon aria-hidden="false" aria-label="Example home icon">list</mat-icon>
     </button>
-  </div>
+  </mat-sidenav-content>
 
-</mat-drawer-container>
+</mat-sidenav-container>
