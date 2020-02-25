@@ -11,7 +11,7 @@
 
 .example-sidenav {
   padding: 20px;
-  min-width: 300px;
+  width: 250px;
   background-color: rgb(73, 73, 73);
 }
 
@@ -36,5 +36,11 @@ p {
 }
 
 .get-data-btn {
+  color: white;
+  background-color: rgb(107, 107, 107);
+}
+
+.search-field {
+  width: 100%;
   color: white;
 }

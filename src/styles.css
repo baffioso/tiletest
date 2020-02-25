@@ -1,4 +1,4 @@
-@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import '@angular/material/prebuilt-themes/pink-bluegrey.css';
 
 /* You can add global styles to this file, and also import other style files */
 html, body { 
@@ -22,7 +22,12 @@ body {
 }
 
 .mat-menu-content {
-    background-color: darkgray;
+    background-color: rgb(73, 73, 73);
+}
+
+.cdk-overlay-container {
+    left: -56px;
+    top: -56px;
 }
 
 .mat-slide-toggle-thumb {

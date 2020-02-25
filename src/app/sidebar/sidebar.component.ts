@@ -19,12 +19,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }[];
   layers: Layer[];
   showSignTools = false;
+  searchString: string;
   private featuresSub: Subscription;
   private layersUpdatedSub: Subscription;
 
   constructor(private mapService: MapService) {}
 
   ngOnInit() {
+    this.signList = [];
     this.subscribeToMapFeatures();
 
     this.layersUpdatedSub = this.mapService.layersUpdated.subscribe(() => {
