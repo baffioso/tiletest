@@ -19,6 +19,26 @@ export const LAYERS = {
             }
         }
     },
+    matrikel: {
+        source: {
+            type: 'vector',
+            tiles: [
+                'https://tegola.baffioso.dk/maps/puma/{z}/{x}/{y}.pbf'
+            ],
+            minzoom: 7,
+            maxzoom: 22
+        },
+        layer: {
+            id: 'matrikel',
+            type: 'line',
+            source: 'signs',
+            'source-layer': 'matrikel',
+            paint: {
+                'line-width': 1.5,
+                'line-color': 'rgba(230, 0, 0, 1)'
+            }
+        }
+    },
     many_points: {
         source: {
             type: 'vector',

@@ -11,6 +11,7 @@ export class MapService {
   layersUpdated = new Subject();
   layers = [
     { name: 'Vejskilte', id: 'signs', visible: false },
-    { name: '500K punkter', id: 'many_points', visible: false }
+    { name: '500K punkter', id: 'many_points', visible: false },
+    { name: 'Matrikel', id: 'matrikel', visible: false }
   ];
 }
