@@ -1,18 +1,21 @@
 <mat-sidenav-container class="example-container" autosize [hasBackdrop]="false">
 
   <mat-sidenav #sidenav class="example-sidenav" mode="over" (opened)="getMapFeatures()">
-    <button mat-icon-button class="close-sidebar" (click)="sidenav.close()">
-      <mat-icon aria-hidden="false" aria-label="Example home icon">close</mat-icon>
+    <button  matSuffix mat-icon-button class="close-sidebar" (click)="sidenav.close()">
+      <mat-icon>close</mat-icon>
     </button>
-    <p *ngIf="!signList || signList.length === 0">Kan max hente data fra 1000 skilte <br> zoom ind og tryk på knappen
-      herunder</p>
-    <button class="get-data-btn" mat-button (click)="updateMapFeatures()">Hent data fra kortet</button>
+    <span *ngIf="!signList || signList.length === 0 && featureCount">Du forsøger at vise <span style="color:tomato;">{{featureCount}}</span> skilte, men kan max vise 1000.<br> 
+      Zoom ind og tryk på 
+    </span>
+    <button class="get-data-btn" mat-icon-button (click)="updateMapFeatures()">
+      <mat-icon>sync</mat-icon>
+    </button>
     <hr>
     <div *ngIf="signList && signList.length > 0">
       <mat-form-field class="search-field">
         <mat-label>Søg skiltetype</mat-label>
         <input matInput type="text" [(ngModel)]="searchString" value=''>
-        <button mat-button *ngIf="searchString" matSuffix mat-icon-button aria-label="Clear" (click)="searchString=''">
+        <button *ngIf="searchString" matSuffix mat-icon-button aria-label="Clear" (click)="searchString=''">
           <mat-icon>close</mat-icon>
         </button>
       </mat-form-field>

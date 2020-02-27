@@ -10,7 +10,7 @@ export const LAYERS = {
         },
         layer: {
             id: 'signs',
-            type: "circle",
+            type: 'circle',
             source: 'signs',
             'source-layer': 'skilte',
             paint: {
@@ -19,7 +19,7 @@ export const LAYERS = {
             }
         }
     },
-    'many_points': {
+    many_points: {
         source: {
             type: 'vector',
             tiles: [

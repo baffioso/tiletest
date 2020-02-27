@@ -17,6 +17,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     sign: string,
     coordinates: [number, number]
   }[];
+  featureCount: number;
   layers: Layer[];
   showSignTools = false;
   searchString: string;
@@ -47,7 +48,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   subscribeToMapFeatures() {
     this.featuresSub = this.mapService.currentMapFeatures
       .subscribe(features => {
-        this.signList = features.map(i => {
+        this.featureCount = features.count;
+        this.signList = features.features.map(i => {
           return {sign: i.properties.hovedtavle_1 , coordinates: i.geometry.coordinates};
         });
       });

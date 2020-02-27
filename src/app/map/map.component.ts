@@ -39,7 +39,7 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
 
         this.layerControlSub = this.mapService.layersUpdated
             .subscribe(() => {
-                this.renderMapLayers();
+                this.renderActivatedMapLayers();
             });
 
         this.updateCurrentFeaturesSub = this.mapService.updateCurrentMapFeatures
@@ -48,11 +48,12 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
 
                 if (features) {
                     const uniqueFeatures = this.getUniqueFeatures(features, 'gid');
+                    const cnt = uniqueFeatures.length;
                     // render max 1000 items
-                    if (uniqueFeatures.length < 1000) {
-                        this.mapService.currentMapFeatures.next(uniqueFeatures);
+                    if (cnt < 1000) {
+                        this.mapService.currentMapFeatures.next({count: cnt, features: uniqueFeatures});
                     } else {
-                        this.mapService.currentMapFeatures.next([]);
+                        this.mapService.currentMapFeatures.next({count: cnt, features: []});
                     }
                 }
             });
@@ -105,7 +106,7 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                 maxzoom: 22
             });
 
-            this.renderMapLayers();
+            this.renderActivatedMapLayers();
 
             this.map.on('mouseenter', 'signs', e => {
                 this.map.getCanvas().style.cursor = 'pointer';
@@ -136,7 +137,7 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
         this.updateLayersSub.unsubscribe();
     }
 
-    renderMapLayers() {
+    renderActivatedMapLayers() {
         this.mapService.layers.forEach(layer => {
             if (layer.visible) {
                 if (this.map.getLayer(layer.id)) {

@@ -1,12 +1,13 @@
 <button 
-    mat-fab color="warn" 
+    mat-fab 
+    color="warn" 
     [matMenuTriggerFor]="menu" 
     class="layer-control-button" 
     aria-label="layer control"
 >
     <mat-icon aria-hidden="false">layers</mat-icon>
 </button>
-<mat-menu #menu="matMenu" class="layer-control">
+<mat-menu #menu="matMenu" class="layer-control" hasBackdrop="false">
     <mat-list role="list" (click)="$event.stopPropagation()">
         <mat-list-item role="listitem" *ngFor="let layer of layers">
             <mat-slide-toggle 
