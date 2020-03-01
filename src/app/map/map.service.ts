@@ -12,6 +12,7 @@ export class MapService {
   layers = [
     { name: 'Vejskilte', id: 'signs', visible: false },
     { name: '500K punkter', id: 'many_points', visible: false },
-    { name: 'Matrikel', id: 'matrikel', visible: false }
+    { name: 'Matrikel (tegola)', id: 'matrikel', visible: false },
+    { name: 'Matrikel (mapbox)', id: 'matrikel2', visible: false }
   ];
 }

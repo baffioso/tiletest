@@ -106,6 +106,13 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                 maxzoom: 22
             });
 
+            this.map.addSource('mapbox', {
+                type: 'vector',
+                url: 'mapbox://baffioso.62gd8740',
+                minzoom: 7,
+                maxzoom: 22
+            });
+
             this.renderActivatedMapLayers();
 
             this.map.on('mouseenter', 'signs', e => {

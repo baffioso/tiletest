@@ -39,6 +39,24 @@ export const LAYERS = {
             }
         }
     },
+    matrikel2: {
+        source: {
+            type: 'vector',
+            url: 'mapbox://baffioso.62gd8740',
+            minzoom: 7,
+            maxzoom: 22
+        },
+        layer: {
+            id: 'matrikel2',
+            type: 'line',
+            source: 'mapbox',
+            'source-layer': 'mat-4cnjq9',
+            paint: {
+                'line-width': 1.5,
+                'line-color': 'rgba(0, 120, 233, 1)'
+            }
+        }
+    },
     many_points: {
         source: {
             type: 'vector',
