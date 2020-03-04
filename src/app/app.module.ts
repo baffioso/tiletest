@@ -21,6 +21,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatInputModule } from '@angular/material/input';
+import { ToggleBaselayerComponent } from './map/toggle-baselayer/toggle-baselayer.component';
 
 @NgModule({
    declarations: [
@@ -31,7 +32,8 @@ import { MatInputModule } from '@angular/material/input';
       FilterComponent,
       SidenavComponent,
       LayerControlComponent,
-      FilterPipe
+      FilterPipe,
+      ToggleBaselayerComponent
    ],
    imports: [
       BrowserModule,

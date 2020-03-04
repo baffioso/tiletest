@@ -51,9 +51,9 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                     const cnt = uniqueFeatures.length;
                     // render max 1000 items
                     if (cnt < 1000) {
-                        this.mapService.currentMapFeatures.next({count: cnt, features: uniqueFeatures});
+                        this.mapService.currentMapFeatures.next({ count: cnt, features: uniqueFeatures });
                     } else {
-                        this.mapService.currentMapFeatures.next({count: cnt, features: []});
+                        this.mapService.currentMapFeatures.next({ count: cnt, features: [] });
                     }
                 }
             });
@@ -88,30 +88,10 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                 }
             }
 
-            this.map.addSource('signs', {
-                type: 'vector',
-                tiles: [
-                    'https://tegola.baffioso.dk/maps/puma/{z}/{x}/{y}.pbf'
-                ],
-                minzoom: 7,
-                maxzoom: 22
-            });
-
-            this.map.addSource('tiletest', {
-                type: 'vector',
-                tiles: [
-                    'https://tegola.baffioso.dk/maps/test/{z}/{x}/{y}.pbf'
-                ],
-                minzoom: 7,
-                maxzoom: 22
-            });
-
-            this.map.addSource('mapbox', {
-                type: 'vector',
-                url: 'mapbox://baffioso.62gd8740',
-                minzoom: 7,
-                maxzoom: 22
-            });
+            // add map sources for all layers
+            for (const layer of LAYERS) {
+                this.map.addSource(layer.sourceId, layer.source);
+            }
 
             this.renderActivatedMapLayers();
 
@@ -150,7 +130,7 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                 if (this.map.getLayer(layer.id)) {
                     this.map.setLayoutProperty(layer.id, 'visibility', 'visible');
                 } else {
-                    this.map.addLayer(LAYERS[layer.id].layer, this.firstSymbolId);
+                    this.map.addLayer(this.findLayerById(LAYERS, layer.id), this.firstSymbolId);
                 }
             } else {
                 if (this.map.getLayer(layer.id)) {
@@ -194,4 +174,15 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
 
         return uniqueFeatures;
     }
+
+    findLayerById(layers, id: string) {
+        for (const layer of layers) {
+            for (const i of layer.layers) {
+                if (i.id === id) {
+                    return i
+                }
+            }
+        }
+    }
+
 }
