@@ -20,13 +20,15 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
     marker: mapboxgl.Marker;
     infoBox: { signId: string, image: string };
     showSignTools = false;
+    isAerial: boolean;
     private zoomToSub: Subscription;
     private layerControlSub: Subscription;
     private updateCurrentFeaturesSub: Subscription;
     private updateLayersSub: Subscription;
+    private changeBaselayerSub: Subscription;
 
     constructor(private mapService: MapService) { }
-
+    s
     ngOnInit() {
         this.zoomToSub = this.mapService.zoomToCoordinate
             .subscribe(coordinate => {
@@ -58,6 +60,26 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                 }
             });
 
+
+        this.changeBaselayerSub = this.mapService.changeBaselayer.subscribe(isAerial => {
+            if (isAerial) {
+                this.isAerial = isAerial;
+                this.map.setStyle('mapbox://styles/mapbox/satellite-v9')
+                // this.map.on('styledata', () => {
+                //     this.addSources();
+                //     this.renderActivatedMapLayers();
+                //     console.log(this.map.getStyle().layers)
+                // });
+            } else {
+                this.isAerial = isAerial;
+                this.map.setStyle('mapbox://styles/mapbox/light-v10')
+                // this.map.on('styledata', () => {
+                //     this.addSources();
+                //     this.renderActivatedMapLayers();
+                // });
+            }
+        })
+
         this.updateLayersSub = this.mapService.layersUpdated
             .subscribe(() => {
                 this.showSignTools = this.mapService.layers[0].visible;
@@ -88,12 +110,15 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                 }
             }
 
-            // add map sources for all layers
-            for (const layer of LAYERS) {
-                this.map.addSource(layer.sourceId, layer.source);
-            }
-
+            this.addSources();
             this.renderActivatedMapLayers();
+
+            // add map sources and render acivated layers
+            this.map.on('styledata', () => {
+                this.addSources();
+                this.renderActivatedMapLayers();
+            });
+
 
             this.map.on('mouseenter', 'signs', e => {
                 this.map.getCanvas().style.cursor = 'pointer';
@@ -111,7 +136,6 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
 
             this.map.on('click', 'signs', e => {
                 const renderedFeatures = this.map.queryRenderedFeatures(e.point);
-                // this.currentProperties = renderedFeatures[0].properties
             });
 
         });
@@ -122,6 +146,15 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
         this.layerControlSub.unsubscribe();
         this.updateCurrentFeaturesSub.unsubscribe();
         this.updateLayersSub.unsubscribe();
+        this.changeBaselayerSub.unsubscribe();
+    }
+
+    addSources() {
+        for (const layer of LAYERS) {
+            if (!this.map.getSource(layer.sourceId)) {
+                this.map.addSource(layer.sourceId, layer.source as mapboxgl.VectorSource);
+            }
+        }
     }
 
     renderActivatedMapLayers() {
@@ -130,7 +163,10 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                 if (this.map.getLayer(layer.id)) {
                     this.map.setLayoutProperty(layer.id, 'visibility', 'visible');
                 } else {
-                    this.map.addLayer(this.findLayerById(LAYERS, layer.id), this.firstSymbolId);
+                    if (this.isAerial) {
+                        this.map.addLayer(this.getLayerStyle(LAYERS, layer.id, layer.currentStyle));
+                    }
+                    this.map.addLayer(this.getLayerStyle(LAYERS, layer.id, layer.currentStyle), this.firstSymbolId);
                 }
             } else {
                 if (this.map.getLayer(layer.id)) {
@@ -175,14 +211,22 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
         return uniqueFeatures;
     }
 
-    findLayerById(layers, id: string) {
-        for (const layer of layers) {
-            for (const i of layer.layers) {
-                if (i.id === id) {
-                    return i
+    getLayerStyle(layers, layerId, styleId) {
+        let layer;
+        let style;
+        for (const i of layers) {
+            for (const l of i.layers) {
+                if (l.layer.id === layerId) {
+                    layer = l
                 }
             }
         }
+        for (const s of layer.styles) {
+            if (s.meta.id === styleId) {
+                style = s.style
+            }
+        }
+        return Object.assign({}, layer.layer, style)
     }
 
 }

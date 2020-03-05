@@ -16,6 +16,8 @@
             >
                 {{layer.name}}
             </mat-slide-toggle>
+
+            <button mat-icon-button (click)="changeStyle(layer.id, 'ugly')"><mat-icon>brush</mat-icon></button>
         </mat-list-item>
     </mat-list>
 </mat-menu>

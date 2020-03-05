@@ -10,20 +10,22 @@ export class MapService {
   updateCurrentMapFeatures = new Subject();
   zoomToCoordinate = new Subject<[number, number]>();
   layersUpdated = new Subject();
+  changeBaselayer = new Subject<boolean>();
   layers = this.layerList(LAYERS);
 
   layerList(layers) {
-    return layers.map(i => {
-      for (const layer of i.layers) {
-         return {
-           name: layer.layerName, 
-           id: layer.id,
-           visible: false,
-           currentStyle: 'default'
-         }
+    let ls = []
+    for (const i of layers) {
+      for (const l of i.layers) {
+        ls.push({
+             name: l.layer.name, 
+             id: l.layer.id,
+             visible: false,
+             currentStyle: 'default'
+         })
       }
-    });
+    }
+    return ls
   }
-
 }
 

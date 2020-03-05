@@ -11,29 +11,72 @@ export const LAYERS = [
         },
         layers: [
             {
-                layerName: 'Skilte',
-                id: 'signs',
-                type: 'circle',
-                source: 'puma',
-                'source-layer': 'skilte',
-                paint: {
-                    'circle-color': 'rgb(53, 175, 109)',
-                    'circle-radius': 4
-                }
-            }, {
-                layerName: 'Matrikel (tegola)',
-                id: 'matrikel',
-                type: 'line',
-                source: 'puma',
-                'source-layer': 'matrikel',
-                paint: {
-                    'line-width': 1.5,
-                    'line-color': 'rgba(230, 0, 0, 1)'
-                }
+                layer: {
+                    name: 'Skilte',
+                    id: 'signs',
+                    source: 'puma',
+                    'source-layer': 'skilte',
+                },
+                styles: [
+                    {
+                        meta: {
+                            id: 'default',
+                            name: 'Normal',
+                            description: 'Dette er min default style',
+                        },
+                        style: {
+                            type: 'circle',
+                            paint: {
+                                'circle-color': 'rgb(53, 175, 109)',
+                                'circle-radius': 4
+                            }
+                        }
+                    }, {
+                        meta: {
+                            id: 'ugly',
+                            name: 'Grim',
+                            description: 'Dette er en grimme punkter',
+                        },
+                        style: {
+                            type: 'circle',
+                            paint: {
+                                'circle-color': 'rgb(255, 0, 109)',
+                                'circle-radius': 8
+                            }
+                        }
+                    },
+                ]
+
+            }, 
+            {
+                layer: {
+                    name: 'Matrikel (tegola)',
+                    id: 'matrikel',
+                    source: 'puma',
+                    'source-layer': 'matrikel',
+                },
+                styles: [
+                    {
+                        meta: {
+                            id: 'default',
+                            name: 'Normal',
+                            description: 'Blå matrikler'
+                        },
+                        style: {
+                            type: 'line',
+                            paint: {
+                                'line-width': 1.5,
+                                'line-color': 'rgba(230, 0, 0, 1)'
+                            }
+                        }
+
+                    }
+                ]
+
+
             }
         ]
-    },
-    {
+    }, {
         sourceId: 'mapbox',
         source: {
             type: 'vector',
@@ -43,18 +86,33 @@ export const LAYERS = [
         },
         layers: [
             {
-                layerName: 'Matrikel (mapbox)',
-                id: 'matrikel2',
-                type: 'line',
-                source: 'mapbox',
-                'source-layer': 'mat-4cnjq9',
-                paint: {
-                    'line-width': 1.5,
-                    'line-color': 'rgba(0, 120, 233, 1)'
-                }
+                layer: {
+                    name: 'Matrikel (mapbox)',
+                    id: 'matrikel2',
+                    source: 'mapbox',
+                    'source-layer': 'mat-4cnjq9',
+                },
+                styles: [
+                    {
+                        meta: {
+                            id: 'default',
+                            name: 'Normal',
+                            description: 'Blå matrikler'
+                        },
+                        style: {
+                            type: 'line',
+                            paint: {
+                                'line-width': 1.5,
+                                'line-color': 'rgba(0, 120, 233, 1)'
+                            }
+                        }
+                    }
+                ]
+
             }
         ]
-    }, {
+    }, 
+    {
         sourceId: 'postgis',
         source: {
             type: 'vector',
@@ -64,21 +122,35 @@ export const LAYERS = [
         },
         layers: [
             {
-                layerName: 'Matrikel (postgis)',
-                id: 'matrikel3',
-                type: 'fill-extrusion',
-                source: 'postgis',
-                // ST_AsMVT() uses 'default' as layer name
-                'source-layer': 'default',
-                minzoom: 0,
-                maxzoom: 22,
-                paint: {
-                    "fill-extrusion-height": ["/", ["get", "regareal"], 1000],
-                    "fill-extrusion-color": "hsla(0, 78%, 48%, 0.7)"
-                }
+                layer: {
+                    name: 'Matrikel (postgis)',
+                    id: 'matrikel3',
+                    source: 'postgis',
+                    // ST_AsMVT() uses 'default' as layer name
+                    'source-layer': 'default',
+                },
+                styles: [
+                    {
+                        meta: {
+                            id: 'default',
+                            name: 'Standard',
+                            description: 'Bla bla bla'
+                        },
+                        style: {
+                            minzoom: 0,
+                            maxzoom: 22,
+                            type: 'fill-extrusion',
+                            paint: {
+                                "fill-extrusion-height": ["/", ["get", "regareal"], 1000],
+                                "fill-extrusion-color": "hsla(0, 78%, 48%, 0.7)"
+                            }
+                        }
+                    }
+                ]
             }
         ]
-    }, {
+    }, 
+    {
         sourceId: 'test',
         source: {
             type: 'vector',
@@ -88,17 +160,30 @@ export const LAYERS = [
         },
         layers: [
             {
-                layerName: '500k punkter',
-                id: 'many_points',
-                type: 'circle',
-                source: 'test',
-                'source-layer': 'many_points',
-                minzoom: 0,
-                maxzoom: 22,
-                paint: {
-                    'circle-color': 'rgb(53, 175, 255)',
-                    'circle-radius': 2
-                }
+                layer: {
+                    name: '500k punkter',
+                    id: 'many_points',
+                    source: 'test',
+                    'source-layer': 'many_points',
+                },
+                styles: [
+                    {
+                        meta: {
+                            id: 'default',
+                            name: 'Standard',
+                            description: 'bla bla'
+                        },
+                        style: {
+                            type: 'circle',
+                            minzoom: 0,
+                            maxzoom: 22,
+                            paint: {
+                                'circle-color': 'rgb(53, 175, 255)',
+                                'circle-radius': 2
+                            }
+                        }
+                    }
+                ]
             }
         ]
     }

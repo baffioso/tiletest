@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { MapService } from '../map.service';
+
 @Component({
   selector: 'app-toggle-baselayer',
   templateUrl: './toggle-baselayer.component.html',
@@ -8,13 +10,13 @@ import { Component, OnInit } from '@angular/core';
 export class ToggleBaselayerComponent implements OnInit {
   isAerial = true
 
-  constructor() { }
+  constructor(private mapService: MapService) { }
 
   ngOnInit(): void {
   }
 
   toggleBaselayer() {
     this.isAerial = !this.isAerial;
-    console.log('toggle', this.isAerial);
+    this.mapService.changeBaselayer.next(this.isAerial)
   }
 }

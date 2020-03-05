@@ -1,6 +1,6 @@
 .btn {
     position: fixed;
-    left: 50px;
-    top: 10px;
+    left: 10px;
+    bottom: 40px;
     z-index: 1;
 }
