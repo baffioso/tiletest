@@ -21,10 +21,12 @@ export class MapService {
              name: l.layer.name, 
              id: l.layer.id,
              visible: false,
-             currentStyle: 'default'
+             currentStyle: 'default',
+             styles: l.styles.map(i => i.meta)
          })
       }
     }
+    console.log(ls)
     return ls
   }
 }

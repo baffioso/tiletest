@@ -3,4 +3,5 @@ export interface Layer {
     name: string;
     visible: boolean;
     currentStyle: any;
+    styles: any;
 }

@@ -1,23 +1,30 @@
-<button 
-    mat-fab 
-    color="warn" 
-    [matMenuTriggerFor]="menu" 
-    class="layer-control-button" 
-    aria-label="layer control"
->
+<button mat-fab color="warn" [matMenuTriggerFor]="menu" class="layer-control-button" aria-label="layer control">
     <mat-icon aria-hidden="false">layers</mat-icon>
 </button>
 <mat-menu #menu="matMenu" class="layer-control" hasBackdrop="false">
     <mat-list role="list" (click)="$event.stopPropagation()">
         <mat-list-item role="listitem" *ngFor="let layer of layers">
-            <mat-slide-toggle 
-                color="warn" 
-                (click)="toggleLayerVisibility($event, layer.id)"
-            >
+            <mat-slide-toggle color="warn" (click)="toggleLayerVisibility($event, layer.id)">
                 {{layer.name}}
             </mat-slide-toggle>
 
-            <button mat-icon-button (click)="changeStyle(layer.id, 'ugly')"><mat-icon>brush</mat-icon></button>
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>brush</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <mat-list role="list">
+                    <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                        [(ngModel)]="favoriteSeason">
+                        <mat-radio-button class="example-radio-button" *ngFor="let season of seasons" [value]="season">
+                            {{season}}
+                        </mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-list-item role="listitem" *ngFor="let style of layer.styles">{{style.name}}
+
+                    </mat-list-item>
+                </mat-list>
+            </mat-menu>
         </mat-list-item>
     </mat-list>
 </mat-menu>

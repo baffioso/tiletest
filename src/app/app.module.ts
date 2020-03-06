@@ -22,6 +22,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatInputModule } from '@angular/material/input';
 import { ToggleBaselayerComponent } from './map/toggle-baselayer/toggle-baselayer.component';
+import {MatRadioModule} from '@angular/material/radio';
 
 @NgModule({
    declarations: [
@@ -47,7 +48,8 @@ import { ToggleBaselayerComponent } from './map/toggle-baselayer/toggle-baselaye
       MatListModule,
       MatSlideToggleModule,
       MatMenuModule,
-      MatInputModule
+      MatInputModule,
+      MatRadioModule
    ],
    providers: [],
    bootstrap: [
