@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
@@ -22,7 +23,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatInputModule } from '@angular/material/input';
 import { ToggleBaselayerComponent } from './map/toggle-baselayer/toggle-baselayer.component';
-import {MatRadioModule} from '@angular/material/radio';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 @NgModule({
    declarations: [
@@ -38,6 +41,7 @@ import {MatRadioModule} from '@angular/material/radio';
    ],
    imports: [
       BrowserModule,
+      HttpClientModule,
       BrowserAnimationsModule,
       FormsModule,
       MatToolbarModule,
@@ -49,7 +53,8 @@ import {MatRadioModule} from '@angular/material/radio';
       MatSlideToggleModule,
       MatMenuModule,
       MatInputModule,
-      MatRadioModule
+      MatRadioModule,
+      MatTooltipModule
    ],
    providers: [],
    bootstrap: [

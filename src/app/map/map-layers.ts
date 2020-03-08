@@ -47,20 +47,22 @@ export const LAYERS = [
                     },
                 ]
 
-            }, 
+            },
             {
                 layer: {
                     name: 'Matrikel (tegola)',
                     id: 'matrikel',
                     source: 'puma',
                     'source-layer': 'matrikel',
+                    minzoom: 0,
+                    maxzoom: 22,
                 },
                 styles: [
                     {
                         meta: {
                             id: 'default',
-                            name: 'Normal',
-                            description: 'Blå matrikler'
+                            name: 'Rød',
+                            description: 'Rød'
                         },
                         style: {
                             type: 'line',
@@ -70,10 +72,39 @@ export const LAYERS = [
                             }
                         }
 
+                    }, {
+                        meta: {
+                            id: 'another',
+                            name: 'Lilla',
+                            description: 'Lilla matrikler'
+                        },
+                        style: {
+                            minzoom: 16,
+                            maxzoom: 22,
+                            type: 'line',
+                            paint: {
+                                'line-width': 4,
+                                'line-color': 'rgba(230, 0, 255, 1)'
+                            }
+                        }
+
+                    }, {
+                        meta: {
+                            id: 'extruded',
+                            name: 'Extrusion',
+                            description: 'Bla bla bla'
+                        },
+                        style: {
+                            minzoom: 0,
+                            maxzoom: 22,
+                            type: 'fill-extrusion',
+                            paint: {
+                                'fill-extrusion-height': ['/', ['get', 'regareal'], 1000],
+                                'fill-extrusion-color': 'hsla(0, 78%, 48%, 0.7)'
+                            }
+                        }
                     }
                 ]
-
-
             }
         ]
     }, {
@@ -111,7 +142,7 @@ export const LAYERS = [
 
             }
         ]
-    }, 
+    },
     {
         sourceId: 'postgis',
         source: {
@@ -141,15 +172,15 @@ export const LAYERS = [
                             maxzoom: 22,
                             type: 'fill-extrusion',
                             paint: {
-                                "fill-extrusion-height": ["/", ["get", "regareal"], 1000],
-                                "fill-extrusion-color": "hsla(0, 78%, 48%, 0.7)"
+                                'fill-extrusion-height': ['/', ['get', 'regareal'], 1000],
+                                'fill-extrusion-color': 'hsla(0, 78%, 48%, 0.7)'
                             }
                         }
                     }
                 ]
             }
         ]
-    }, 
+    },
     {
         sourceId: 'test',
         source: {
@@ -187,4 +218,4 @@ export const LAYERS = [
             }
         ]
     }
-]
+];

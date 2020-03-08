@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { MapService } from './map.service';
-import { LAYERS } from './map-layers';
 
 @Component({
     selector: 'app-map',
@@ -21,14 +20,16 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
     infoBox: { signId: string, image: string };
     showSignTools = false;
     isAerial: boolean;
+    layers;
     private zoomToSub: Subscription;
     private layerControlSub: Subscription;
     private updateCurrentFeaturesSub: Subscription;
     private updateLayersSub: Subscription;
+    private updateLayerStyleSub: Subscription;
     private changeBaselayerSub: Subscription;
 
     constructor(private mapService: MapService) { }
-    s
+
     ngOnInit() {
         this.zoomToSub = this.mapService.zoomToCoordinate
             .subscribe(coordinate => {
@@ -39,9 +40,14 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                 this.marker = new mapboxgl.Marker().setLngLat(coordinate).addTo(this.map);
             });
 
-        this.layerControlSub = this.mapService.layersUpdated
+        this.layerControlSub = this.mapService.updateLayerVisible
             .subscribe(() => {
                 this.renderActivatedMapLayers();
+            });
+
+        this.updateLayerStyleSub = this.mapService.updateLayerStyle
+            .subscribe( (res: {layer: string, style: string}) => {
+                this.changeLayerStyle(this.mapService.layers, res.layer, res.style);
             });
 
         this.updateCurrentFeaturesSub = this.mapService.updateCurrentMapFeatures
@@ -64,7 +70,7 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
         this.changeBaselayerSub = this.mapService.changeBaselayer.subscribe(isAerial => {
             if (isAerial) {
                 this.isAerial = isAerial;
-                this.map.setStyle('mapbox://styles/mapbox/satellite-v9')
+                this.map.setStyle('mapbox://styles/mapbox/satellite-v9');
                 // this.map.on('styledata', () => {
                 //     this.addSources();
                 //     this.renderActivatedMapLayers();
@@ -72,17 +78,17 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                 // });
             } else {
                 this.isAerial = isAerial;
-                this.map.setStyle('mapbox://styles/mapbox/light-v10')
+                this.map.setStyle('mapbox://styles/mapbox/light-v10');
                 // this.map.on('styledata', () => {
                 //     this.addSources();
                 //     this.renderActivatedMapLayers();
                 // });
             }
-        })
+        });
 
-        this.updateLayersSub = this.mapService.layersUpdated
+        this.updateLayersSub = this.mapService.updateLayerVisible
             .subscribe(() => {
-                this.showSignTools = this.mapService.layers[0].visible;
+                this.showSignTools = this.mapService.layerControl[0].visible;
             });
     }
 
@@ -97,6 +103,7 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
             center: [this.lng, this.lat],
             hash: true
         });
+
         // Add map controls
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 
@@ -110,15 +117,14 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                 }
             }
 
-            this.addSources();
+            this.addSources(this.mapService.layers);
             this.renderActivatedMapLayers();
 
             // add map sources and render acivated layers
             this.map.on('styledata', () => {
-                this.addSources();
+                this.addSources(this.mapService.layers);
                 this.renderActivatedMapLayers();
             });
-
 
             this.map.on('mouseenter', 'signs', e => {
                 this.map.getCanvas().style.cursor = 'pointer';
@@ -144,13 +150,14 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
     ngOnDestroy() {
         this.zoomToSub.unsubscribe();
         this.layerControlSub.unsubscribe();
+        this.updateLayerStyleSub.unsubscribe();
         this.updateCurrentFeaturesSub.unsubscribe();
         this.updateLayersSub.unsubscribe();
         this.changeBaselayerSub.unsubscribe();
     }
 
-    addSources() {
-        for (const layer of LAYERS) {
+    addSources(layers) {
+        for (const layer of layers) {
             if (!this.map.getSource(layer.sourceId)) {
                 this.map.addSource(layer.sourceId, layer.source as mapboxgl.VectorSource);
             }
@@ -158,15 +165,15 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     renderActivatedMapLayers() {
-        this.mapService.layers.forEach(layer => {
+        this.mapService.layerControl.forEach(layer => {
             if (layer.visible) {
                 if (this.map.getLayer(layer.id)) {
                     this.map.setLayoutProperty(layer.id, 'visibility', 'visible');
                 } else {
                     if (this.isAerial) {
-                        this.map.addLayer(this.getLayerStyle(LAYERS, layer.id, layer.currentStyle));
+                        this.map.addLayer(this.getLayerStyle(this.mapService.layers, layer.id, layer.currentStyle));
                     }
-                    this.map.addLayer(this.getLayerStyle(LAYERS, layer.id, layer.currentStyle), this.firstSymbolId);
+                    this.map.addLayer(this.getLayerStyle(this.mapService.layers, layer.id, layer.currentStyle), this.firstSymbolId);
                 }
             } else {
                 if (this.map.getLayer(layer.id)) {
@@ -217,16 +224,38 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
         for (const i of layers) {
             for (const l of i.layers) {
                 if (l.layer.id === layerId) {
-                    layer = l
+                    layer = l;
                 }
             }
         }
         for (const s of layer.styles) {
             if (s.meta.id === styleId) {
-                style = s.style
+                style = s.style;
             }
         }
-        return Object.assign({}, layer.layer, style)
+        return Object.assign({}, layer.layer, style);
+    }
+
+    changeLayerStyle(layers, layerId, style) {
+        const stl = this.getLayerStyle(layers, layerId, style);
+        const paint = stl.paint;
+        const layout = stl.layout;
+
+        // this.map.removeLayer(layerId);
+        // this.map.removeSource(layerId);
+        // this.map.addLayer(layerId, stl);
+
+        if (paint) {
+            for (const key of Object.keys(paint)) {
+                this.map.setPaintProperty(layerId, key, paint[key]);
+            }
+        }
+
+        if (layout) {
+            for (const key of Object.keys(layout)) {
+                this.map.setPaintProperty(layerId, key, layout[key]);
+            }
+        }
     }
 
 }

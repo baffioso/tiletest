@@ -1,29 +1,41 @@
-<button mat-fab color="warn" [matMenuTriggerFor]="menu" class="layer-control-button" aria-label="layer control">
+<button mat-fab color="warn" [matMenuTriggerFor]="layerMenu" class="layer-control-button" aria-label="layer control">
     <mat-icon aria-hidden="false">layers</mat-icon>
 </button>
-<mat-menu #menu="matMenu" class="layer-control" hasBackdrop="false">
+<mat-menu #layerMenu="matMenu" class="layer-control" hasBackdrop="false">
     <mat-list role="list" (click)="$event.stopPropagation()">
-        <mat-list-item role="listitem" *ngFor="let layer of layers">
-            <mat-slide-toggle color="warn" (click)="toggleLayerVisibility($event, layer.id)">
-                {{layer.name}}
-            </mat-slide-toggle>
+        <mat-list-item role="listitem" *ngFor="let layer of layers" class="layer-control">
+            <div class="container">
+                <div>
+                    <mat-slide-toggle color="warn" (click)="toggleLayerVisibility($event, layer.id)">
+                        {{layer.name}}
+                    </mat-slide-toggle>
+                </div>
+                <div>
+                    <button 
+                        *ngIf="layer.visible && layer.styles.length > 1" 
+                        mat-icon-button 
+                        [matMenuTriggerFor]="styleMenu"  
+                        matTooltip="Vælg lag-styling"
+                        matTooltipPosition="left"
+                    >
+                        <mat-icon>brush</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <mat-menu #styleMenu="matMenu" hasBackdrop="false">
+                <mat-radio-group class="style-radio-group">
+                    <mat-radio-button class="style-radio-button" 
+                        *ngFor="let style of layer.styles; let i = index" 
+                        [value]="style.id"
+                        (click)="changeStyle(layer.id, style.id)"
+                        [checked]="i === 0"
+                        [matTooltip]="style.description"
+                        matTooltipPosition="before"
 
-            <button mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon>brush</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-                <mat-list role="list">
-                    <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                        [(ngModel)]="favoriteSeason">
-                        <mat-radio-button class="example-radio-button" *ngFor="let season of seasons" [value]="season">
-                            {{season}}
-                        </mat-radio-button>
-                    </mat-radio-group>
-
-                    <mat-list-item role="listitem" *ngFor="let style of layer.styles">{{style.name}}
-
-                    </mat-list-item>
-                </mat-list>
+                    >
+                        {{style.name}}
+                    </mat-radio-button>
+                </mat-radio-group>
             </mat-menu>
         </mat-list-item>
     </mat-list>

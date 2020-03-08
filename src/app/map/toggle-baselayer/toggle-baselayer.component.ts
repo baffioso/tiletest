@@ -8,7 +8,7 @@ import { MapService } from '../map.service';
   styleUrls: ['./toggle-baselayer.component.css']
 })
 export class ToggleBaselayerComponent implements OnInit {
-  isAerial = true
+  isAerial = false;
 
   constructor(private mapService: MapService) { }
 
@@ -17,6 +17,6 @@ export class ToggleBaselayerComponent implements OnInit {
 
   toggleBaselayer() {
     this.isAerial = !this.isAerial;
-    this.mapService.changeBaselayer.next(this.isAerial)
+    this.mapService.changeBaselayer.next(this.isAerial);
   }
 }

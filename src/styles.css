@@ -21,15 +21,10 @@ body {
     height: 35px;
 }
 
-.mat-menu-content {
-    background-color: rgb(73, 73, 73);
-}
-
-.cdk-overlay-container {
-    left: -56px;
-    top: -56px;
+.mat-menu-panel.layer-control {
+    min-width: 250px;
 }
 
 .mat-slide-toggle-thumb {
-    background-color: black;
+    background-color: rgb(31, 30, 30);
 }

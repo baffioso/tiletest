@@ -30,9 +30,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.signList = [];
     this.subscribeToMapFeatures();
 
-    this.layersUpdatedSub = this.mapService.layersUpdated.subscribe(() => {
-      this.layers = this.mapService.layers;
-      this.showSignTools = this.mapService.layers[0].visible;
+    this.layersUpdatedSub = this.mapService.updateLayerVisible.subscribe(() => {
+      this.layers = this.mapService.layerControl;
+      this.showSignTools = this.mapService.layerControl[0].visible;
     });
   }
 
