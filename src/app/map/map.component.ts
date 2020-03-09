@@ -158,7 +158,7 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
         this.changeBaselayerSub.unsubscribe();
     }
 
-    addSource(layers: Layer[], sourceId: string) {
+    addSource(layers, sourceId: string) {
         for (const layer of layers) {
             // only add source if not already added
             if (layer.sourceId === sourceId && !this.map.getSource(layer.sourceId)) {
@@ -241,7 +241,7 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
         return uniqueFeatures;
     }
 
-    getSourceIdFromLayerId(layers: Layer[], layerId: string) {
+    getSourceIdFromLayerId(layers, layerId: string) {
         let sourceId: string;
         for (const i of layers) {
             sourceId = i.sourceId;
