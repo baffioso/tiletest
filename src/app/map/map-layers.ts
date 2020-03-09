@@ -79,8 +79,6 @@ export const LAYERS = [
                             description: 'Lilla matrikler'
                         },
                         style: {
-                            minzoom: 16,
-                            maxzoom: 22,
                             type: 'line',
                             paint: {
                                 'line-width': 4,
@@ -100,7 +98,31 @@ export const LAYERS = [
                             type: 'fill-extrusion',
                             paint: {
                                 'fill-extrusion-height': ['/', ['get', 'regareal'], 1000],
-                                'fill-extrusion-color': 'hsla(0, 78%, 48%, 0.7)'
+                                'fill-extrusion-color': [
+                                    'case',
+                                    ['match', ['get', 'arealtype'], ['Jernbane'], true, false],
+                                    'hsl(238, 78%, 53%)',
+                                    [
+                                        'match',
+                                        ['get', 'arealtype'],
+                                        ['Brugsretsareal'],
+                                        true,
+                                        false
+                                    ],
+                                    'hsl(144, 97%, 49%)',
+                                    [
+                                        'match',
+                                        ['get', 'arealtype'],
+                                        ['Privat vej'],
+                                        true,
+                                        false
+                                    ],
+                                    'hsl(272, 92%, 68%)',
+                                    ['match', ['get', 'arealtype'], ['Kanal'], true, false],
+                                    'hsl(36, 100%, 55%)',
+                                    'hsl(56, 68%, 57%)'
+                                ],
+                                'fill-extrusion-opacity': 0.76
                             }
                         }
                     }
