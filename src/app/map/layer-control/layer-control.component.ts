@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MapService } from '../map.service';
 
-import { Layer } from '../layer';
+import { LayerControlItem } from '../interfaces/layer-control-item';
 
 @Component({
   selector: 'app-layer-control',
@@ -9,8 +9,8 @@ import { Layer } from '../layer';
   styleUrls: ['./layer-control.component.css']
 })
 export class LayerControlComponent implements OnInit {
-  // layers: Layer[];
-  layers;
+  layers: LayerControlItem[];
+  // layers;
 
   constructor(private mapService: MapService) { }
 

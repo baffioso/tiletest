@@ -1,7 +1,7 @@
-export interface Layer {
+export interface LayerControlItem {
     id: string;
     name: string;
     visible: boolean;
-    currentStyle: any;
+    currentStyle: string;
     styles: any;
 }
