@@ -71,19 +71,10 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
         this.changeBaselayerSub = this.mapService.changeBaselayer.subscribe(isAerial => {
             if (isAerial) {
                 this.isAerial = isAerial;
-                this.map.setStyle('mapbox://styles/mapbox/satellite-v9');
-                // this.map.on('styledata', () => {
-                //     this.addSources();
-                //     this.renderActivatedMapLayers();
-                //     console.log(this.map.getStyle().layers)
-                // });
+                this.map.setStyle('mapbox://styles/mapbox/streets-v9');
             } else {
                 this.isAerial = isAerial;
                 this.map.setStyle('mapbox://styles/mapbox/light-v10');
-                // this.map.on('styledata', () => {
-                //     this.addSources();
-                //     this.renderActivatedMapLayers();
-                // });
             }
         });
 
@@ -109,6 +100,15 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
         this.map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 
         this.map.on('load', () => {
+
+            // add custom sprite to map style
+            this.map.on('styledata', () => {
+                let stl = this.map.getStyle();
+                stl.sprite = 'https://baffioso.github.io/sprite/sprite'
+                this.map.setStyle(stl);
+            })
+
+
             const layers = this.map.getStyle().layers;
             // Find the index of the first symbol layer in the map style
             for (const layer of layers) {

@@ -44,6 +44,20 @@ export const LAYERS = [
                                 'circle-radius': 8
                             }
                         }
+                    }, {
+                        meta: {
+                            id: 'icon',
+                            name: 'Ikon',
+                            description: 'Sprite ikoner på kortet',
+                        },
+                        style: {
+                            type: 'symbol',
+                            layout: {
+                                //"icon-image": "bicycle-15",
+                                "icon-image": "grave",
+                                "icon-size": 0.1 
+                            }
+                        }
                     },
                 ]
 
