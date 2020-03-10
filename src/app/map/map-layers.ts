@@ -53,9 +53,8 @@ export const LAYERS = [
                         style: {
                             type: 'symbol',
                             layout: {
-                                //"icon-image": "bicycle-15",
-                                "icon-image": "grave",
-                                "icon-size": 0.1 
+                                'icon-image': 'grave',
+                                'icon-size': 0.1
                             }
                         }
                     },

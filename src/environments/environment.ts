@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   mapbox: {
-    accessToken: 'pk.eyJ1IjoiYmFmZmlvc28iLCJhIjoiT1JTS1lIMCJ9.f5ubY91Bi42yPnTrgiq-Gw'
+    accessToken: 'pk.eyJ1IjoiYmFmZmlvc28iLCJhIjoiT1JTS1lIMCJ9.f5ubY91Bi42yPnTrgiq-Gw',
+    spriteUrl: 'http://baffioso.github.io/sprite/sprite'
   }
 };
 

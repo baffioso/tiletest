@@ -103,10 +103,12 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
 
             // add custom sprite to map style
             this.map.on('styledata', () => {
-                let stl = this.map.getStyle();
-                stl.sprite = 'https://baffioso.github.io/sprite/sprite'
-                this.map.setStyle(stl);
-            })
+                const stl = this.map.getStyle();
+                if (stl.sprite !== environment.mapbox.spriteUrl) {
+                    stl.sprite = environment.mapbox.spriteUrl;
+                    this.map.setStyle(stl);
+                }
+            });
 
 
             const layers = this.map.getStyle().layers;
