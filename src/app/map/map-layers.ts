@@ -180,21 +180,20 @@ export const LAYERS = [
         ]
     },
     {
-        sourceId: 'postgis',
+        sourceId: 'mat_ts',
         source: {
             type: 'vector',
-            tiles: ['http://localhost:8080/{z}/{x}/{y}.mvt'],
+            tiles: ['https://tileserv.baffioso.dk/public.matrikel/{z}/{x}/{y}.pbf'],
             minzoom: 7,
             maxzoom: 22
         },
         layers: [
             {
                 layer: {
-                    name: 'Matrikel (postgis)',
+                    name: 'Matrikel (tileserv)',
                     id: 'matrikel3',
-                    source: 'postgis',
-                    // ST_AsMVT() uses 'default' as layer name
-                    'source-layer': 'default',
+                    source: 'mat_ts',
+                    'source-layer': 'public.matrikel',
                 },
                 styles: [
                     {
@@ -211,6 +210,64 @@ export const LAYERS = [
                                 'fill-extrusion-height': ['/', ['get', 'regareal'], 1000],
                                 'fill-extrusion-color': 'hsla(0, 78%, 48%, 0.7)'
                             }
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        sourceId: 'p_pladser',
+        source: {
+            type: 'vector',
+            tiles: ['https://tileserv.baffioso.dk/public.p_pladser/{z}/{x}/{y}.pbf'],
+            minzoom: 0,
+            maxzoom: 22
+        },
+        layers: [
+            {
+                layer: {
+                    name: 'P-pladser (tileserv)',
+                    id: 'p_pladser',
+                    source: 'p_pladser',
+                    'source-layer': 'public.p_pladser',
+                },
+                styles: [
+                    {
+                        meta: {
+                            id: 'default',
+                            name: 'Farveskift',
+                            description: 'Skifter farve mellem zoom 15-16'
+                        },
+                        style: {
+                            minzoom: 0,
+                            maxzoom: 22,
+                            type: 'line',
+                            "layout": {
+                                "line-miter-limit": {
+                                  "stops": [[6, 2], [10, 2]]
+                                },
+                                "line-join": {
+                                  "stops": [
+                                    [6, "miter"],
+                                    [10, "miter"]
+                                  ]
+                                },
+                                "visibility": "visible"
+                              },
+                              "paint": {
+                                "line-color": {
+                                  "stops": [
+                                    [15, "rgba(220, 33, 33, 1)"],
+                                    [16, "rgba(0, 255, 29, 1)"]
+                                  ]
+                                },
+                                "line-translate-anchor": "map",
+                                "line-width": {
+                                  "stops": [[12, 1], [20, 5]]
+                                },
+                                "line-opacity": 1
+                              },
                         }
                     }
                 ]
