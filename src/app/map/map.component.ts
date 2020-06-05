@@ -22,6 +22,7 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
     showSignTools = false;
     isAerial: boolean;
     layers: Layer[];
+    popup: mapboxgl.Popup;
     private zoomToSub: Subscription;
     private layerControlSub: Subscription;
     private updateCurrentFeaturesSub: Subscription;
@@ -199,6 +200,9 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
                         this.getLayerStyle(this.mapService.layers, layer.id, layer.currentStyle),
                         this.isAerial ? null : this.firstSymbolId
                     );
+                    this.map.on('styledata', () => {
+                        this.addLayerBehavior(layer.id);
+                    })
                 }
             } else {
                 if (this.map.getLayer(layer.id)) {
@@ -297,4 +301,39 @@ export class MapComponent implements AfterViewInit, OnInit, OnDestroy {
         // }
     }
 
+    // Convert feature properties into html
+    featureHtml(f) {
+        var p = f.properties;
+        var h = "<p>";
+        for (var k in p) {
+            h += "<b>" + k + ":</b> " + p[k] + "<br/>"
+        }
+        h += "</p>";
+
+        return h;
+    }
+    
+    addLayerBehavior(id: string) {
+        // When a click event occurs on a feature in the states layer, open a popup at the
+        // location of the click, with description HTML from its properties.
+        this.map.on('click', id, (e) => {
+            if (this.popup) {
+                this.popup.remove();
+            }
+            this.popup = new mapboxgl.Popup()
+            .setLngLat(e.lngLat)
+            .setHTML(this.featureHtml(e.features[0]))
+            // .setHTML('<h1>Hello World!</h1>')
+            .addTo(this.map);
+        });
+        // Change the cursor to a pointer when the mouse is over feature.
+        this.map.on('mouseenter', id, () => {
+            this.map.getCanvas().style.cursor = 'pointer';
+          });
+  
+        // Change it back to a pointer when it leaves.
+        this.map.on('mouseleave', id, () => {
+            this.map.getCanvas().style.cursor = '';
+        });
+    }
 }
