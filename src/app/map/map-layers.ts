@@ -216,6 +216,61 @@ export const LAYERS = [
         ]
     },
     {
+        sourceId: 'hex',
+        source: {
+            type: 'vector',
+            tiles: ['https://tileserv.baffioso.dk/public.hex_broend_count/{z}/{x}/{y}.pbf'],
+            minzoom: 7,
+            maxzoom: 22
+        },
+        layers: [
+            {
+                layer: {
+                    name: 'Brønde - hexagon (tileserv)',
+                    id: 'hex',
+                    source: 'hex',
+                    'source-layer': 'public.hex_broend_count',
+                },
+                styles: [
+                    {
+                        meta: {
+                            id: 'default',
+                            name: 'Hexagoner',
+                            description: 'Hexagoner med antal brønde - 4 per tile genereret on-the-fly'
+                        },
+                        style: {
+                            minzoom: 0,
+                            maxzoom: 22,
+                            type: 'fill-extrusion',
+                            "paint": {
+                                "fill-extrusion-color": {
+                                  "property": "antal_broende",
+                                  "type": "interval",
+                                  "stops": [
+                                    [
+                                      {"zoom": 6, "value": 0},
+                                      "rgba(79, 245, 13, 1)"
+                                    ],
+                                    [
+                                      {"zoom": 10, "value": 0},
+                                      "rgba(248, 9, 9, 1)"
+                                    ]
+                                  ],
+                                  "default": "rgba(232, 227, 227, 1)"
+                                },
+                                "fill-extrusion-height": {
+                                  "type": "identity",
+                                  "property": "antal_broende"
+                                },
+                                "fill-extrusion-opacity": 0.9
+                              }
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    {
         sourceId: 'p_pladser',
         source: {
             type: 'vector',
